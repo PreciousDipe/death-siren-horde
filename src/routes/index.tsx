@@ -1,29 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SiteShell } from "@/components/layout/SiteShell";
+import { Hero } from "@/components/home/Hero";
+import { StatsBar } from "@/components/home/StatsBar";
+import { AboutSection } from "@/components/home/AboutSection";
+import { RosterPreview } from "@/components/home/RosterPreview";
+import { BottomGrid } from "@/components/home/BottomGrid";
+import { WhyJoin } from "@/components/home/WhyJoin";
+import { CtaTrio } from "@/components/home/CtaTrio";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "DeathSirens — Nigeria's Elite Mobile Legends Esports Squad" },
+      { name: "description", content: "DeathSirens is Nigeria's premier Mobile Legends esports organization. Competing, dominating, and building champions on the global stage." },
+      { property: "og:title", content: "DeathSirens Esports" },
+      { property: "og:description", content: "Nigeria's elite Mobile Legends squad — competing, dominating, building champions." },
+      { property: "og:image", content: logo },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Index,
+  component: HomePage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function HomePage() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <SiteShell>
+      <Hero />
+      <StatsBar />
+      <AboutSection />
+      <RosterPreview />
+      <BottomGrid />
+      <WhyJoin />
+      <CtaTrio />
+    </SiteShell>
   );
 }
