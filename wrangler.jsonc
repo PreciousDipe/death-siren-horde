@@ -3,13 +3,9 @@
   "name": "death-siren-horde",
   "compatibility_date": "2026-06-09",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "dist/server/index.js",
+  "main": "dist/server/server.js",
   "assets": {
     "directory": "./dist/client",
     "binding": "ASSETS"
-  },
-  "alias": {
-    "tanstack-start-manifest:v": "./dist/server/index.js",
-    "tanstack-start-injected-head-scripts:v": "./dist/server/index.js"
   }
 }
