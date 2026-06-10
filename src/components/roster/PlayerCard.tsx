@@ -5,13 +5,16 @@ interface Props {
   player: Player;
   showRealName?: boolean;
   className?: string;
+  onClick?: (player: Player) => void;
 }
 
-export function PlayerCard({ player, showRealName, className = "" }: Props) {
+export function PlayerCard({ player, showRealName, className = "", onClick }: Props) {
   const accent = roleAccent[player.role];
   return (
-    <div
-      className={`group relative overflow-hidden rounded-xl border border-white/5 bg-[#181818] hover-glow-brand ${className}`}
+    <button
+      type="button"
+      onClick={() => onClick?.(player)}
+      className={`group relative w-full text-left overflow-hidden rounded-xl border border-white/5 bg-[#181818] hover-glow-brand cursor-pointer ${className}`}
     >
       <div className="relative aspect-[3/4] w-full overflow-hidden">
         <img
@@ -43,6 +46,6 @@ export function PlayerCard({ player, showRealName, className = "" }: Props) {
           </div>
         )}
       </div>
-    </div>
+    </button>
   );
 }
