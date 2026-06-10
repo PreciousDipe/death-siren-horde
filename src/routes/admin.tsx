@@ -386,9 +386,9 @@ function SimpleList<T extends { id: string }>({
                 <div key={String(f.key)}>
                   <Label>{f.label}</Label>
                   {f.type === "textarea" ? (
-                    <textarea className={textareaCls} value={String(editing[f.key] ?? "")} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })} />
+                    <textarea className={textareaCls} value={String(editing[f.key] ?? "")} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value } as T)} />
                   ) : f.type === "select" ? (
-                    <select className={inputCls} value={String(editing[f.key] ?? "")} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })}>
+                    <select className={inputCls} value={String(editing[f.key] ?? "")} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value } as T)}>
                       {f.options?.map((o) => <option key={o}>{o}</option>)}
                     </select>
                   ) : f.type === "image" ? (
@@ -396,11 +396,11 @@ function SimpleList<T extends { id: string }>({
                       {editing[f.key] && <img src={String(editing[f.key])} alt="" className="h-14 w-14 object-cover rounded-md border border-white/10" />}
                       <input type="file" accept="image/*" className="text-xs" onChange={(e) => {
                         const file = e.target.files?.[0]; if (!file) return;
-                        const r = new FileReader(); r.onload = () => setEditing({ ...editing, [f.key]: String(r.result) }); r.readAsDataURL(file);
+                        const r = new FileReader(); r.onload = () => setEditing({ ...editing, [f.key]: String(r.result) } as T); r.readAsDataURL(file);
                       }} />
                     </div>
                   ) : (
-                    <input type={f.type === "date" ? "date" : "text"} className={inputCls} value={String(editing[f.key] ?? "")} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })} />
+                    <input type={f.type === "date" ? "date" : "text"} className={inputCls} value={String(editing[f.key] ?? "")} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value } as T)} />
                   )}
                 </div>
               ))}
