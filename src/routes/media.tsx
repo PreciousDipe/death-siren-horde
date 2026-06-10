@@ -12,9 +12,9 @@ import n3 from "@/assets/news-3.jpg";
 export const Route = createFileRoute("/media")({
   head: () => ({
     meta: [
-      { title: "Media — DeathSirens Esports" },
-      { name: "description", content: "Photos, highlights and behind-the-scenes content from the DeathSirens Mobile Legends squad." },
-      { property: "og:title", content: "DeathSirens Media" },
+      { title: "Media — Darkstar Esports" },
+      { name: "description", content: "Photos, highlights and behind-the-scenes content from the Darkstar Mobile Legends squad." },
+      { property: "og:title", content: "Darkstar Media" },
       { property: "og:description", content: "Photos, highlights and behind-the-scenes from the squad." },
     ],
   }),

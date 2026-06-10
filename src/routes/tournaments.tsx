@@ -7,9 +7,9 @@ import { StandingsTable } from "@/components/tournaments/StandingsTable";
 export const Route = createFileRoute("/tournaments")({
   head: () => ({
     meta: [
-      { title: "Tournaments — DeathSirens Esports" },
-      { name: "description", content: "Upcoming matches, schedule and current MPL Nigeria standings for the DeathSirens Mobile Legends squad." },
-      { property: "og:title", content: "DeathSirens Tournaments" },
+      { title: "Tournaments — Darkstar Esports" },
+      { name: "description", content: "Upcoming matches, schedule and current MPL Nigeria standings for the Darkstar Mobile Legends squad." },
+      { property: "og:title", content: "Darkstar Tournaments" },
       { property: "og:description", content: "Upcoming matches, schedule and current standings." },
     ],
   }),

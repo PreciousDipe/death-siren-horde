@@ -37,19 +37,19 @@ export function Hero() {
       {/* Side watermark */}
       <div className="pointer-events-none absolute inset-y-0 left-0 hidden md:flex items-center overflow-hidden">
         <span className="rotate-180 [writing-mode:vertical-rl] font-display text-[10rem] leading-none font-extrabold tracking-[0.4em] text-white/[0.03] select-none">
-          DEATHSIRENS
+          DARKSTAR
         </span>
       </div>
       <div className="pointer-events-none absolute inset-y-0 right-0 hidden md:flex items-center overflow-hidden">
         <span className="[writing-mode:vertical-rl] font-display text-[10rem] leading-none font-extrabold tracking-[0.4em] text-white/[0.03] select-none">
-          DEATHSIRENS
+          DARKSTAR
         </span>
       </div>
 
       <div className="mx-auto flex max-w-5xl flex-col items-center px-4 py-20 text-center md:py-32">
         <img
           src={logo}
-          alt="DeathSirens"
+          alt="Darkstar"
           width={180}
           height={180}
           className="h-32 w-32 md:h-44 md:w-44 object-contain drop-shadow-[0_0_30px_rgba(139,61,255,0.6)]"

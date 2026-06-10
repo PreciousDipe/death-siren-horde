@@ -5,7 +5,7 @@ import n3 from "@/assets/news-3.jpg";
 export const news = [
   {
     image: n1,
-    title: "DeathSirens Claim MPL Nigeria Spring Split Title",
+    title: "Darkstar Claim MPL Nigeria Spring Split Title",
     date: "12 MAY 2025",
   },
   {

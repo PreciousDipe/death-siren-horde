@@ -10,10 +10,10 @@ const tabs: Filter[] = ["ALL", ...ROLES];
 export const Route = createFileRoute("/roster")({
   head: () => ({
     meta: [
-      { title: "Our Players — DeathSirens Roster" },
-      { name: "description", content: "Meet the DeathSirens Mobile Legends roster — the players carrying Nigeria's elite esports squad." },
-      { property: "og:title", content: "DeathSirens Roster" },
-      { property: "og:description", content: "Meet the heart of our organization — the DeathSirens active roster." },
+      { title: "Our Players — Darkstar Roster" },
+      { name: "description", content: "Meet the Darkstar Mobile Legends roster — the players carrying Nigeria's elite esports squad." },
+      { property: "og:title", content: "Darkstar Roster" },
+      { property: "og:description", content: "Meet the heart of our organization — the Darkstar active roster." },
     ],
   }),
   component: RosterPage,

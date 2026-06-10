@@ -36,13 +36,13 @@ export function Navbar() {
         <Link to="/" className="flex items-center gap-2 group">
           <img
             src={logo}
-            alt="DeathSirens logo"
+            alt="Darkstar logo"
             className="h-9 w-9 object-contain drop-shadow-[0_0_8px_rgba(139,61,255,0.6)] transition-transform group-hover:scale-105"
             width={36}
             height={36}
           />
           <span className="font-display text-lg font-extrabold tracking-widest text-white">
-            DEATHSIRENS
+            DARKSTAR
           </span>
         </Link>
 

@@ -15,7 +15,7 @@ export function WhyJoin() {
         <div className="mb-12 text-center">
           <span className="text-xs font-bold tracking-[0.3em] text-[#00B8FF]">/ THE EDGE</span>
           <h2 className="mt-2 font-display text-3xl md:text-5xl font-extrabold">
-            WHY JOIN <span className="text-gradient-brand">DEATHSIRENS?</span>
+            WHY JOIN <span className="text-gradient-brand">DARKSTAR?</span>
           </h2>
         </div>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
