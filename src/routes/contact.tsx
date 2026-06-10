@@ -7,9 +7,9 @@ import { Mail, MessageCircle, Send } from "lucide-react";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact & Apply — DeathSirens Esports" },
-      { name: "description", content: "Apply to join the DeathSirens roster, reach out for partnerships, or contact the team." },
-      { property: "og:title", content: "Contact DeathSirens" },
+      { title: "Contact & Apply — Darkstar Esports" },
+      { name: "description", content: "Apply to join the Darkstar roster, reach out for partnerships, or contact the team." },
+      { property: "og:title", content: "Contact Darkstar" },
       { property: "og:description", content: "Apply, partner, or just say hi to the squad." },
     ],
   }),
@@ -65,8 +65,8 @@ function ContactPage() {
 
         <aside className="space-y-3">
           {[
-            { Icon: Mail, label: "Email", value: "contact@deathsirens.gg" },
-            { Icon: MessageCircle, label: "Discord", value: "discord.gg/deathsirens" },
+            { Icon: Mail, label: "Email", value: "contact@darkstar.gg" },
+            { Icon: MessageCircle, label: "Discord", value: "discord.gg/darkstar" },
             { Icon: Send, label: "WhatsApp", value: "+234 901 234 5678" },
           ].map(({ Icon, label, value }) => (
             <div key={label} className="rounded-xl border border-white/5 bg-[#181818] p-4 flex items-center gap-3">

@@ -28,7 +28,7 @@ export function Footer() {
           <div className="flex items-center gap-2">
             <img src={logo} alt="" className="h-9 w-9" width={36} height={36} loading="lazy" />
             <span className="font-display text-lg font-extrabold tracking-widest">
-              DEATHSIRENS
+              DARKSTAR
             </span>
           </div>
           <p className="text-sm text-[#A0A0A0] italic font-semibold max-w-xs">
@@ -75,7 +75,7 @@ export function Footer() {
             ))}
           </div>
           <p className="text-xs text-[#A0A0A0]">
-            © {new Date().getFullYear()} DeathSirens Esports. All rights reserved.
+            © {new Date().getFullYear()} Darkstar Esports. All rights reserved.
           </p>
         </div>
       </div>

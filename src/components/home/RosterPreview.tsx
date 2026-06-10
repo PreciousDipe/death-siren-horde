@@ -1,10 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { players } from "@/data/players";
+import { useState } from "react";
+import { players, type Player } from "@/data/players";
 import { PlayerCard } from "@/components/roster/PlayerCard";
+import { PlayerModal } from "@/components/roster/PlayerModal";
 import { ArrowRight } from "lucide-react";
 
 export function RosterPreview() {
   const five = players.slice(0, 5);
+  const [selected, setSelected] = useState<Player | null>(null);
   return (
     <section className="bg-[#0c0c0c] py-20">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
@@ -27,11 +30,12 @@ export function RosterPreview() {
         <div className="grid grid-flow-col auto-cols-[80%] sm:auto-cols-[45%] md:grid-flow-row md:grid-cols-5 md:auto-cols-auto gap-4 overflow-x-auto md:overflow-visible snap-x pb-2 -mx-4 px-4 md:mx-0 md:px-0">
           {five.map((p) => (
             <div key={p.ign} className="snap-start">
-              <PlayerCard player={p} />
+              <PlayerCard player={p} onClick={setSelected} />
             </div>
           ))}
         </div>
       </div>
+      <PlayerModal player={selected} onClose={() => setSelected(null)} />
     </section>
   );
 }

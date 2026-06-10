@@ -8,10 +8,10 @@ export function AboutSection() {
           / ABOUT US
         </span>
         <h2 className="mt-3 font-display text-3xl md:text-5xl font-extrabold">
-          ABOUT <span className="text-gradient-brand">DEATHSIRENS</span>
+          ABOUT <span className="text-gradient-brand">DARKSTAR</span>
         </h2>
         <p className="mt-6 text-base md:text-lg leading-relaxed text-[#A0A0A0]">
-          DeathSirens is Nigeria's premier Mobile Legends esports organization,
+          Darkstar is Nigeria's premier Mobile Legends esports organization,
           founded to give African talent a real stage on the global circuit. We
           compete at the highest levels of MPL and international invitationals,
           building a roster of disciplined athletes, world-class coaches, and a

@@ -12,9 +12,9 @@ import logo from "@/assets/logo.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "DeathSirens — Nigeria's Elite Mobile Legends Esports Squad" },
-      { name: "description", content: "DeathSirens is Nigeria's premier Mobile Legends esports organization. Competing, dominating, and building champions on the global stage." },
-      { property: "og:title", content: "DeathSirens Esports" },
+      { title: "Darkstar — Nigeria's Elite Mobile Legends Esports Squad" },
+      { name: "description", content: "Darkstar is Nigeria's premier Mobile Legends esports organization. Competing, dominating, and building champions on the global stage." },
+      { property: "og:title", content: "Darkstar Esports" },
       { property: "og:description", content: "Nigeria's elite Mobile Legends squad — competing, dominating, building champions." },
       { property: "og:image", content: logo },
       { name: "twitter:card", content: "summary_large_image" },

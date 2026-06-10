@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo.png";
 import heroBg from "@/assets/hero-bg.jpg";
+import { ParticleField } from "@/components/home/ParticleField";
 
 export function Hero() {
   return (
@@ -14,42 +15,27 @@ export function Hero() {
       />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(139,61,255,0.18),transparent_60%),linear-gradient(to_bottom,rgba(8,8,8,0.55),#080808_85%)]" />
 
-      {/* Particle dots */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        {Array.from({ length: 40 }).map((_, i) => (
-          <span
-            key={i}
-            className="absolute block rounded-full"
-            style={{
-              top: `${(i * 37) % 100}%`,
-              left: `${(i * 53) % 100}%`,
-              width: i % 5 === 0 ? 3 : 2,
-              height: i % 5 === 0 ? 3 : 2,
-              background: i % 3 === 0 ? "#00B8FF" : "#8B3DFF",
-              opacity: 0.5,
-              boxShadow: `0 0 6px ${i % 3 === 0 ? "#00B8FF" : "#8B3DFF"}`,
-              animation: `pulse-glow ${3 + (i % 5)}s ease-in-out ${i * 0.15}s infinite`,
-            }}
-          />
-        ))}
-      </div>
+      {/* Animated particle network */}
+      <ParticleField className="-z-10 opacity-90" />
+
+
 
       {/* Side watermark */}
       <div className="pointer-events-none absolute inset-y-0 left-0 hidden md:flex items-center overflow-hidden">
         <span className="rotate-180 [writing-mode:vertical-rl] font-display text-[10rem] leading-none font-extrabold tracking-[0.4em] text-white/[0.03] select-none">
-          DEATHSIRENS
+          DARKSTAR
         </span>
       </div>
       <div className="pointer-events-none absolute inset-y-0 right-0 hidden md:flex items-center overflow-hidden">
         <span className="[writing-mode:vertical-rl] font-display text-[10rem] leading-none font-extrabold tracking-[0.4em] text-white/[0.03] select-none">
-          DEATHSIRENS
+          DARKSTAR
         </span>
       </div>
 
       <div className="mx-auto flex max-w-5xl flex-col items-center px-4 py-20 text-center md:py-32">
         <img
           src={logo}
-          alt="DeathSirens"
+          alt="Darkstar"
           width={180}
           height={180}
           className="h-32 w-32 md:h-44 md:w-44 object-contain drop-shadow-[0_0_30px_rgba(139,61,255,0.6)]"

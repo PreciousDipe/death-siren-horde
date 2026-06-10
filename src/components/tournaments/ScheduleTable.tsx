@@ -20,7 +20,7 @@ export function ScheduleTable() {
             </div>
             <div className="flex items-center gap-2 md:gap-3 min-w-0">
               <img src={logo} alt="" className="h-7 w-7 flex-none" width={28} height={28} loading="lazy" />
-              <span className="font-display text-sm font-bold truncate">DEATHSIRENS</span>
+              <span className="font-display text-sm font-bold truncate">DARKSTAR</span>
             </div>
             <div className="font-display text-xs font-bold text-[#A0A0A0]">VS</div>
             <div className="flex items-center gap-2 md:gap-3 min-w-0">

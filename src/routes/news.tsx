@@ -5,9 +5,9 @@ import { news } from "@/data/news";
 export const Route = createFileRoute("/news")({
   head: () => ({
     meta: [
-      { title: "News — DeathSirens Esports" },
-      { name: "description", content: "Latest DeathSirens news — roster updates, results, signings and announcements." },
-      { property: "og:title", content: "DeathSirens News" },
+      { title: "News — Darkstar Esports" },
+      { name: "description", content: "Latest Darkstar news — roster updates, results, signings and announcements." },
+      { property: "og:title", content: "Darkstar News" },
       { property: "og:description", content: "Roster updates, results, signings and announcements." },
     ],
   }),

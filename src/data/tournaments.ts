@@ -27,7 +27,7 @@ export interface StandingRow {
 }
 
 export const standings: StandingRow[] = [
-  { team: "DEATHSIRENS", w: 12, l: 2, pts: 36, highlight: true },
+  { team: "DARKSTAR", w: 12, l: 2, pts: 36, highlight: true },
   { team: "LAGOS LIONS", w: 10, l: 4, pts: 30 },
   { team: "ABUJA TITANS", w: 9, l: 5, pts: 27 },
   { team: "PORT HARCOURT FURY", w: 7, l: 7, pts: 21 },

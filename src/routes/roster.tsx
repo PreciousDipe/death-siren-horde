@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { PlayerCard } from "@/components/roster/PlayerCard";
-import { players, ROLES, type Role } from "@/data/players";
+import { PlayerModal } from "@/components/roster/PlayerModal";
+import { players, ROLES, type Role, type Player } from "@/data/players";
 
 type Filter = "ALL" | Role;
 const tabs: Filter[] = ["ALL", ...ROLES];
@@ -10,10 +11,10 @@ const tabs: Filter[] = ["ALL", ...ROLES];
 export const Route = createFileRoute("/roster")({
   head: () => ({
     meta: [
-      { title: "Our Players — DeathSirens Roster" },
-      { name: "description", content: "Meet the DeathSirens Mobile Legends roster — the players carrying Nigeria's elite esports squad." },
-      { property: "og:title", content: "DeathSirens Roster" },
-      { property: "og:description", content: "Meet the heart of our organization — the DeathSirens active roster." },
+      { title: "Our Players — Darkstar Roster" },
+      { name: "description", content: "Meet the Darkstar Mobile Legends roster — the players carrying Nigeria's elite esports squad." },
+      { property: "og:title", content: "Darkstar Roster" },
+      { property: "og:description", content: "Meet the heart of our organization — the Darkstar active roster." },
     ],
   }),
   component: RosterPage,
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/roster")({
 
 function RosterPage() {
   const [active, setActive] = useState<Filter>("ALL");
+  const [selected, setSelected] = useState<Player | null>(null);
   const filtered = useMemo(
     () => (active === "ALL" ? players : players.filter((p) => p.role === active)),
     [active]
@@ -57,9 +59,10 @@ function RosterPage() {
       <section className="mx-auto max-w-7xl px-4 md:px-6 py-10">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
-            <PlayerCard key={p.ign} player={p} showRealName />
+            <PlayerCard key={p.ign} player={p} showRealName onClick={setSelected} />
           ))}
         </div>
+        <PlayerModal player={selected} onClose={() => setSelected(null)} />
         {filtered.length === 0 && (
           <p className="text-center text-[#A0A0A0] py-12">No players in this role yet.</p>
         )}

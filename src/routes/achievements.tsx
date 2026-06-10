@@ -5,9 +5,9 @@ import { Trophy, Medal, Star } from "lucide-react";
 export const Route = createFileRoute("/achievements")({
   head: () => ({
     meta: [
-      { title: "Achievements — DeathSirens Esports" },
-      { name: "description", content: "Trophies, titles and milestones of the DeathSirens Mobile Legends roster." },
-      { property: "og:title", content: "DeathSirens Achievements" },
+      { title: "Achievements — Darkstar Esports" },
+      { name: "description", content: "Trophies, titles and milestones of the Darkstar Mobile Legends roster." },
+      { property: "og:title", content: "Darkstar Achievements" },
       { property: "og:description", content: "Our trophy cabinet — championships, finals and notable runs." },
     ],
   }),
