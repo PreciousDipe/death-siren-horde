@@ -21,7 +21,7 @@ export function CtaTrio() {
             Apply to Join
           </Link>
         </div>
-        <div className="rounded-xl border border-white/5 bg-[#181818] p-8 text-center hover-glow-blue">
+        {/* <div className="rounded-xl border border-white/5 bg-[#181818] p-8 text-center hover-glow-blue">
           <h3 className="font-display text-xl font-extrabold tracking-wider">TOURNAMENT REGISTRATION</h3>
           <p className="mt-3 text-sm text-[#A0A0A0]">
             Register your team for upcoming tournaments and community events.
@@ -32,7 +32,7 @@ export function CtaTrio() {
           >
             Register Team
           </Link>
-        </div>
+        </div> */}
         <div className="rounded-xl border border-white/5 bg-[#181818] p-8 text-center hover-glow-blue">
           <h3 className="font-display text-xl font-extrabold tracking-wider">STAY UPDATED</h3>
           <p className="mt-3 text-sm text-[#A0A0A0]">

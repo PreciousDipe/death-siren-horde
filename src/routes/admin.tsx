@@ -27,8 +27,9 @@ type Achievement = { id: string; title: string; year: string; image?: string };
 type Media = { id: string; caption: string; url: string };
 type Settings = {
   teamName: string; tagline: string; heroText: string; aboutText: string; logoUrl: string;
-  instagram: string; twitter: string; discord: string; email: string;
+  instagram: string; twitter: string; tiktok?: string; discord: string; email: string;
 };
+
 
 interface Store {
   players: Player[];
@@ -58,10 +59,10 @@ const defaultStore = (): Store => ({
     heroText: "NIGERIA'S ELITE MOBILE LEGENDS SQUAD",
     aboutText: "Darkstar is Nigeria's premier Mobile Legends esports organization.",
     logoUrl: logo,
-    instagram: "https://instagram.com/darkstar",
-    twitter: "https://twitter.com/darkstar",
-    discord: "https://discord.gg/darkstar",
-    email: "contact@darkstar.gg",
+    instagram: "https://instagram.com/dark_stars164",
+    tiktok: "https://tiktok.com/@darkstar_esport",
+    discord: "https://discord.gg/ENm2RYJ4u",
+    email: "darkstaresports1@gmail.com",
   },
 });
 

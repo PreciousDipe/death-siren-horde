@@ -105,14 +105,14 @@ export function BottomGrid() {
         {/* Community */}
         <div className="rounded-xl border border-white/5 bg-[#181818] p-5">
           <h3 className="font-display text-lg font-extrabold tracking-wider mb-4">COMMUNITY</h3>
-          <p className="text-sm text-[#A0A0A0] mb-5">Join our growing community of fans, scrim partners, and aspiring pros.</p>
+          <p className="text-sm text-[#A0A0A0] mb-5">Join the Darkstar family. Where champions are built and legends are made.</p>
           <div className="space-y-2">
             <a href="#" className="flex items-center justify-center gap-2 h-11 rounded-md bg-[#1e2a78] font-display text-xs font-bold uppercase tracking-[0.16em] text-white hover:brightness-110 transition">
               <MessageCircle className="h-4 w-4" /> Join Discord
             </a>
-            <a href="#" className="flex items-center justify-center gap-2 h-11 rounded-md bg-[#1aa64b] font-display text-xs font-bold uppercase tracking-[0.16em] text-white hover:brightness-110 transition">
+            {/* <a href="#" className="flex items-center justify-center gap-2 h-11 rounded-md bg-[#1aa64b] font-display text-xs font-bold uppercase tracking-[0.16em] text-white hover:brightness-110 transition">
               <Send className="h-4 w-4" /> WhatsApp Group
-            </a>
+            </a> */}
           </div>
           <div className="mt-5 flex items-center gap-2">
             {[Instagram, Music2, Facebook, Twitter].map((Icon, i) => (

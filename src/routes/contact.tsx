@@ -17,12 +17,12 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", ign: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", role: "", ign: "", message: "" });
 
   return (
     <SiteShell>
       <section className="mx-auto max-w-7xl px-4 md:px-6 pt-16 pb-8">
-        <span className="text-xs font-bold tracking-[0.3em] text-[#00B8FF]">/ JOIN THE SQUAD</span>
+        <span className="text-xs font-bold tracking-[0.3em] text-[#00B8FF]">/ JOIN DARKSTAR</span>
         <h1 className="mt-2 font-display text-4xl md:text-6xl font-extrabold">CONTACT US</h1>
         <p className="mt-3 italic font-semibold text-[#A0A0A0]">Apply for a tryout, partner with us, or just say hi.</p>
       </section>
@@ -35,14 +35,20 @@ function ContactPage() {
               toast.error("Please provide a name and valid email");
               return;
             }
+            if (!form.role) {
+              toast.error("Please select a role");
+              return;
+            }
             toast.success("Thanks! The squad will reach out soon.");
-            setForm({ name: "", email: "", ign: "", message: "" });
+            setForm({ name: "", email: "", role: "", ign: "", message: "" });
           }}
           className="rounded-xl border border-white/5 bg-[#181818] p-6 md:p-8 space-y-4"
         >
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="Full Name" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
-            <Field label="Email" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
+            {/* <Field label="Role" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} /> */}
+            <Field label="Role" type="select" value={form.role} onChange={(v) => setForm({ ...form, role: v })} options={["Marksman", "Mage", "Jungle", "Roam", "Exp"]} />
+
           </div>
           <Field label="In-Game Name (IGN)" value={form.ign} onChange={(v) => setForm({ ...form, ign: v })} />
           <div>
@@ -52,7 +58,7 @@ function ContactPage() {
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               rows={6}
               className="mt-2 w-full rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm text-white placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#00B8FF]"
-              placeholder="Tell us about your rank, experience, role..."
+              placeholder="Tell us about your experience playing mobile legends and why you're interested in joining Darkstar..."
             />
           </div>
           <button
@@ -65,9 +71,8 @@ function ContactPage() {
 
         <aside className="space-y-3">
           {[
-            { Icon: Mail, label: "Email", value: "contact@darkstar.gg" },
-            { Icon: MessageCircle, label: "Discord", value: "discord.gg/darkstar" },
-            { Icon: Send, label: "WhatsApp", value: "+234 901 234 5678" },
+            { Icon: Mail, label: "Email", value: "darkstaresports1@gmail.com" },
+            { Icon: MessageCircle, label: "Discord", value: "https://discord.gg/ENm2RYJ4u" },
           ].map(({ Icon, label, value }) => (
             <div key={label} className="rounded-xl border border-white/5 bg-[#181818] p-4 flex items-center gap-3">
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-[#00B8FF]/10 text-[#00B8FF] ring-1 ring-[#00B8FF]/30">
@@ -85,16 +90,45 @@ function ContactPage() {
   );
 }
 
-function Field({ label, value, onChange, type = "text" }: { label: string; value: string; onChange: (v: string) => void; type?: string }) {
+function Field({
+  label,
+  value,
+  onChange,
+  type = "text",
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: "text" | "email" | "select";
+  options?: string[];
+}) {
   return (
     <div>
       <label className="text-[11px] font-bold tracking-[0.2em] text-[#A0A0A0]">{label.toUpperCase()}</label>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="mt-2 h-11 w-full rounded-md border border-white/10 bg-[#121212] px-3 text-sm text-white placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#00B8FF]"
-      />
+      {type === "select" ? (
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="mt-2 h-11 w-full rounded-md border border-white/10 bg-[#121212] px-3 text-sm text-white placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#00B8FF]"
+        >
+          <option value="" disabled>
+            Select a role
+          </option>
+          {options?.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="mt-2 h-11 w-full rounded-md border border-white/10 bg-[#121212] px-3 text-sm text-white placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#00B8FF]"
+        />
+      )}
     </div>
   );
 }

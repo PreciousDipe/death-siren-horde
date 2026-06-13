@@ -11,12 +11,12 @@ export function AboutSection() {
           ABOUT <span className="text-gradient-brand">DARKSTAR</span>
         </h2>
         <p className="mt-6 text-base md:text-lg leading-relaxed text-[#A0A0A0]">
-          Darkstar is Nigeria's premier Mobile Legends esports organization,
-          founded to give African talent a real stage on the global circuit. We
-          compete at the highest levels of MPL and international invitationals,
-          building a roster of disciplined athletes, world-class coaches, and a
-          community that bleeds the colors. From Lagos to the world — we are the
-          siren they hear before the storm.
+          Darkstar is Nigeria's leading Mobile Legends esports team, 
+          built to showcase African talent on the global stage. 
+          We're a community of elite players, passionate fans, 
+          and relentless competitors driven by one mission, to put Nigerian MLBB at the top. 
+          Through discipline, structured teamwork, and a ruthless commitment to improvement, 
+          we compete at the highest level while building a movement that inspires the next generation of African esports champions.
         </p>
         <Link
           to="/achievements"

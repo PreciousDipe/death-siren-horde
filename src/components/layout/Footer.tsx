@@ -11,7 +11,7 @@ import {
 
 const quickLinks = [
   { to: "/", label: "Home" },
-  { to: "/roster", label: "Roster" },
+  { to: "/roster", label: "Team" },
   { to: "/tournaments", label: "Tournaments" },
   { to: "/achievements", label: "Achievements" },
   { to: "/media", label: "Media" },

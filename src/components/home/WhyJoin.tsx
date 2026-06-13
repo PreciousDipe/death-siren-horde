@@ -1,11 +1,11 @@
-import { Briefcase, GraduationCap, Globe2, Megaphone, Users } from "lucide-react";
+import { Swords, GraduationCap, Trophy, Brain, Users } from "lucide-react";
 
 const items = [
-  { Icon: Briefcase, title: "Professional Environment", desc: "Bootcamp facility, scrim partners, analyst-driven prep." },
-  { Icon: GraduationCap, title: "Experienced Coaches", desc: "Tier-1 coaching staff with international scene experience." },
-  { Icon: Globe2, title: "Global Exposure", desc: "Compete in MPL, MSC, and international invitationals." },
-  { Icon: Megaphone, title: "Grow Your Brand", desc: "Content, branding, and media support for every player." },
-  { Icon: Users, title: "Strong Community", desc: "A fanbase that travels and a culture that wins together." },
+  { Icon: Swords, title: "Weekly Scrims", desc: "Regular scrims to make you better and competitive." },
+  { Icon: GraduationCap, title: "Learn From Pros", desc: "Learn from the best and improve your game play style." },
+  { Icon: Trophy, title: "Tournaments", desc: "Play real tournaments and represent Darkstar in international competitions." },
+  { Icon: Brain, title: "Strategies", desc: "Learn drafting and plan games built to win every match." },
+  { Icon: Users, title: "Strong Community", desc: "A small dedicated squad growing together and shares wins together." },
 ];
 
 export function WhyJoin() {

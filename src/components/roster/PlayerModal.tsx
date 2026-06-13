@@ -56,7 +56,7 @@ export function PlayerModal({ player, onClose }: Props) {
             <h2 className="mt-2 font-display text-3xl md:text-4xl font-extrabold text-white">
               {player.realName}
             </h2>
-            <div className="mt-1 font-display text-lg font-bold text-[#00B8FF] tracking-widest">
+            <div className="..." style={{ fontFamily: "'Noto Sans', 'Noto Sans Symbols', system-ui, sans-serif" }}>
               {player.ign}
             </div>
           </div>
@@ -66,7 +66,7 @@ export function PlayerModal({ player, onClose }: Props) {
           <div className="grid grid-cols-2 gap-3 text-sm">
             <Info label="Player ID" value={`#${player.playerId}`} />
             <Info label="Nationality" value={`${player.flag} ${player.nationality}`} />
-            <Info label="Age" value={`${player.age}`} />
+            {/* <Info label="Age" value={`${player.age}`} /> */}
             <Info label="Years Active" value={`${player.yearsActive}`} />
           </div>
 

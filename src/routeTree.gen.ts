@@ -13,6 +13,7 @@ import { Route as TournamentsRouteImport } from './routes/tournaments'
 import { Route as RosterRouteImport } from './routes/roster'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as MediaRouteImport } from './routes/media'
+import { Route as DeathsirenRouteImport } from './routes/deathsiren'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AchievementsRouteImport } from './routes/achievements'
@@ -36,6 +37,11 @@ const NewsRoute = NewsRouteImport.update({
 const MediaRoute = MediaRouteImport.update({
   id: '/media',
   path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeathsirenRoute = DeathsirenRouteImport.update({
+  id: '/deathsiren',
+  path: '/deathsiren',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/achievements': typeof AchievementsRoute
   '/admin': typeof AdminRoute
   '/contact': typeof ContactRoute
+  '/deathsiren': typeof DeathsirenRoute
   '/media': typeof MediaRoute
   '/news': typeof NewsRoute
   '/roster': typeof RosterRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/achievements': typeof AchievementsRoute
   '/admin': typeof AdminRoute
   '/contact': typeof ContactRoute
+  '/deathsiren': typeof DeathsirenRoute
   '/media': typeof MediaRoute
   '/news': typeof NewsRoute
   '/roster': typeof RosterRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/achievements': typeof AchievementsRoute
   '/admin': typeof AdminRoute
   '/contact': typeof ContactRoute
+  '/deathsiren': typeof DeathsirenRoute
   '/media': typeof MediaRoute
   '/news': typeof NewsRoute
   '/roster': typeof RosterRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/achievements'
     | '/admin'
     | '/contact'
+    | '/deathsiren'
     | '/media'
     | '/news'
     | '/roster'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/achievements'
     | '/admin'
     | '/contact'
+    | '/deathsiren'
     | '/media'
     | '/news'
     | '/roster'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/achievements'
     | '/admin'
     | '/contact'
+    | '/deathsiren'
     | '/media'
     | '/news'
     | '/roster'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   AchievementsRoute: typeof AchievementsRoute
   AdminRoute: typeof AdminRoute
   ContactRoute: typeof ContactRoute
+  DeathsirenRoute: typeof DeathsirenRoute
   MediaRoute: typeof MediaRoute
   NewsRoute: typeof NewsRoute
   RosterRoute: typeof RosterRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/media'
       fullPath: '/media'
       preLoaderRoute: typeof MediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/deathsiren': {
+      id: '/deathsiren'
+      path: '/deathsiren'
+      fullPath: '/deathsiren'
+      preLoaderRoute: typeof DeathsirenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   AchievementsRoute: AchievementsRoute,
   AdminRoute: AdminRoute,
   ContactRoute: ContactRoute,
+  DeathsirenRoute: DeathsirenRoute,
   MediaRoute: MediaRoute,
   NewsRoute: NewsRoute,
   RosterRoute: RosterRoute,
@@ -208,3 +229,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

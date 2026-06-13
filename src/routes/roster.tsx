@@ -34,7 +34,7 @@ function RosterPage() {
         <span className="text-xs font-bold tracking-[0.3em] text-[#00B8FF]">/ THE SQUAD</span>
         <h1 className="mt-2 font-display text-4xl md:text-6xl font-extrabold">OUR PLAYERS</h1>
         <p className="mt-3 text-base md:text-lg text-[#A0A0A0] italic font-semibold">
-          The heart of our organization.
+          Team Members of Darkstar
         </p>
       </section>
 
@@ -59,7 +59,7 @@ function RosterPage() {
       <section className="mx-auto max-w-7xl px-4 md:px-6 py-10">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
-            <PlayerCard key={p.ign} player={p} showRealName onClick={setSelected} />
+            <PlayerCard key={p.ign} player={p} onClick={setSelected} />
           ))}
         </div>
         <PlayerModal player={selected} onClose={() => setSelected(null)} />
@@ -74,7 +74,7 @@ function RosterPage() {
           <h2 className="font-display text-3xl md:text-5xl font-extrabold">
             THINK YOU HAVE <span className="text-gradient-brand">WHAT IT TAKES?</span>
           </h2>
-          <p className="mt-4 text-[#A0A0A0]">Join our academy and start your pro journey today.</p>
+          <p className="mt-4 text-[#A0A0A0]">Join our Team and start your journey to become a champion.</p>
           <Link
             to="/contact"
             className="mt-8 inline-flex h-12 items-center justify-center rounded-md bg-[#8B3DFF] px-8 font-display text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_0_24px_rgba(139,61,255,0.5)]"

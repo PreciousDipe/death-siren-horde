@@ -33,7 +33,7 @@ export function PlayerCard({ player, showRealName, className = "", onClick }: Pr
         </span>
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-4">
-        <div className="font-display text-xl font-extrabold uppercase tracking-wider text-white">
+        <div className="text-xl font-extrabold uppercase tracking-wider text-white" style={{ fontFamily: "'Noto Sans', 'Noto Sans Symbols', system-ui, sans-serif" }}>
           {player.ign}
         </div>
         {showRealName && (
