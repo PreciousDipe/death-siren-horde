@@ -92,7 +92,7 @@ export function Hero() {
       
 
       {/* Dot Indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden md:flex gap-2">
         {slides.map((_, i) => (
           <button
             key={i}
