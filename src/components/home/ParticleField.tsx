@@ -24,12 +24,12 @@ export function ParticleField({ className = "" }: { className?: string }) {
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
+      const w = Math.max(canvas.clientWidth, 1);
+      const h = Math.max(canvas.clientHeight, 1);
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.min(70, Math.floor((w * h) / 16000));
+      const count = Math.min(70, Math.max(20, Math.floor((w * h) / 16000)));
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
@@ -85,9 +85,12 @@ export function ParticleField({ className = "" }: { className?: string }) {
     resize();
     tick();
     window.addEventListener("resize", resize);
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(resize) : null;
+    ro?.observe(canvas);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      ro?.disconnect();
     };
   }, []);
 
