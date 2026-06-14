@@ -7,5 +7,9 @@
   "assets": {
     "directory": "./dist/client",
     "binding": "ASSETS"
+  },
+  "vars": {
+    "VITE_SUPABASE_URL": "",
+    "VITE_SUPABASE_PROJECT_ID": ""
   }
 }
