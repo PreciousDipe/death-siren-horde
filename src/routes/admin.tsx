@@ -1,12 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   LogOut, Users, Trophy, Newspaper, Image as ImageIcon, Award, Settings as SettingsIcon,
-  Plus, Pencil, Trash2, Save, X,
+  Plus, Pencil, Trash2, Save, X, UserPlus
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { players as seedPlayers, ROLES, type Player, type Role } from "@/data/players";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -18,7 +19,6 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-const SESSION_KEY = "darkstar_admin_session";
 const STORE_KEY = "darkstar_admin_store";
 
 type Tournament = { id: string; name: string; date: string; result: string; status: "WIN" | "LOSE" | "UPCOMING"; image?: string };
@@ -29,7 +29,6 @@ type Settings = {
   teamName: string; tagline: string; heroText: string; aboutText: string; logoUrl: string;
   instagram: string; twitter: string; tiktok?: string; discord: string; email: string;
 };
-
 
 interface Store {
   players: Player[];
@@ -81,57 +80,146 @@ function saveStore(s: Store) {
   localStorage.setItem(STORE_KEY, JSON.stringify(s));
 }
 
+// ─── AdminPage uses Supabase auth ───────────────────────────────
 function AdminPage() {
+  const navigate = useNavigate();
   const [authed, setAuthed] = useState(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setAuthed(localStorage.getItem(SESSION_KEY) === "1");
-    setReady(true);
+    async function checkAuth() {
+      // Get current Supabase user
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        setReady(true);
+        return;
+      }
+
+      // Check if user has admin role in profiles table
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+      if (error || profile?.role !== "admin") {
+        setReady(true);
+        return;
+      }
+
+      setAuthed(true);
+      setReady(true);
+    }
+
+    checkAuth();
   }, []);
 
-  if (!ready) return <div className="min-h-screen bg-[#080808]" />;
-  if (!authed) return <Login onLogin={() => { localStorage.setItem(SESSION_KEY, "1"); setAuthed(true); }} />;
-  return <Dashboard onLogout={() => { localStorage.removeItem(SESSION_KEY); setAuthed(false); }} />;
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setAuthed(false);
+    toast.success("Logged out");
+    navigate({ to: "/" });
+  };
+
+  if (!ready) return <div className="min-h-screen bg-[#080808] flex items-center justify-center">
+    <div className="text-[#A0A0A0] text-sm animate-pulse">Checking access...</div>
+  </div>;
+
+  if (!authed) return <Login onLogin={() => setAuthed(true)} />;
+
+  return <Dashboard onLogout={handleLogout} />;
 }
 
+// ─── Login uses Supabase signInWithPassword ─────────────────────
 function Login({ onLogin }: { onLogin: () => void }) {
-  const [u, setU] = useState("");
-  const [p, setP] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      // Sign in with Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      // Check if user has admin role
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+
+      if (profileError || profile?.role !== "admin") {
+        await supabase.auth.signOut();
+        toast.error("Access denied. Admin privileges required.");
+        return;
+      }
+
+      toast.success("Welcome back, Admin");
+      onLogin();
+    } catch (err: any) {
+      toast.error(err.message ?? "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#080808] px-4">
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (u === "admin" && p === "darkstar2024") {
-            toast.success("Welcome back, Admin");
-            onLogin();
-          } else {
-            toast.error("Invalid credentials");
-          }
-        }}
+        onSubmit={handleLogin}
         className="w-full max-w-md rounded-2xl border border-white/10 bg-[#181818] p-8 shadow-[0_20px_80px_-20px_rgba(0,184,255,0.35)]"
       >
         <div className="flex flex-col items-center mb-6">
           <img src={logo} alt="" className="h-16 w-16 drop-shadow-[0_0_15px_#00B8FF]" />
           <h1 className="mt-3 font-display text-2xl font-extrabold">ADMIN ACCESS</h1>
-          <p className="text-xs text-[#A0A0A0] mt-1">Darkstar Control Panel</p>
+          <p className="text-xs text-[#A0A0A0] mt-1">Darkstar Admin Panel</p>
         </div>
-        <Label>Username</Label>
-        <input value={u} onChange={(e) => setU(e.target.value)} className={inputCls} autoFocus />
+        <Label>Email</Label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={inputCls}
+          placeholder="admin@example.com"
+          autoFocus
+          required
+        />
         <Label className="mt-4">Password</Label>
-        <input type="password" value={p} onChange={(e) => setP(e.target.value)} className={inputCls} />
-        <button type="submit" className="mt-6 w-full h-12 rounded-md font-display text-sm font-bold uppercase tracking-[0.2em] bg-gradient-to-r from-[#00B8FF] to-[#8B3DFF] text-white shadow-[0_0_24px_rgba(0,184,255,0.4)]">
-          Sign In
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className={inputCls}
+          placeholder="••••••••"
+          required
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-6 w-full h-12 rounded-md font-display text-sm font-bold uppercase tracking-[0.2em] bg-gradient-to-r from-[#00B8FF] to-[#8B3DFF] text-white shadow-[0_0_24px_rgba(0,184,255,0.4)] disabled:opacity-60"
+        >
+          {loading ? "Signing in..." : "Sign In"}
         </button>
-        <p className="mt-4 text-[11px] text-center text-[#A0A0A0]">Default: admin / darkstar2024</p>
+        <p className="mt-4 text-[11px] text-center text-[#A0A0A0]">
+          Admin access only
+        </p>
       </form>
     </div>
   );
 }
+// ─────────────────────────────────────────────────────────────────────────────
 
 const TABS = [
   { id: "players", label: "Team", Icon: Users },
+  { id: "accounts", label: "Accounts", Icon: UserPlus }, // New Accounts Tab added here
   { id: "tournaments", label: "Tournaments", Icon: Trophy },
   { id: "achievements", label: "Achievements", Icon: Award },
   { id: "news", label: "News", Icon: Newspaper },
@@ -191,6 +279,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
         <main className="p-4 md:p-8 flex-1">
           {tab === "players" && <PlayersTab store={store} update={update} />}
+          {tab === "accounts" && <AccountsTab />}
           {tab === "tournaments" && <TournamentsTab store={store} update={update} />}
           {tab === "achievements" && <AchievementsTab store={store} update={update} />}
           {tab === "news" && <NewsTab store={store} update={update} />}
@@ -215,6 +304,103 @@ function Card({ children }: { children: React.ReactNode }) {
 }
 function TableRow({ children, i }: { children: React.ReactNode; i: number }) {
   return <tr className={i % 2 ? "bg-[#121212]" : "bg-[#181818]"}>{children}</tr>;
+}
+
+/* ---------- Accounts ---------- */
+function AccountsTab() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("member");
+  const [loading, setLoading] = useState(false);
+
+  // Ensure this part in your admin.tsx is clean
+  const handleCreateAccount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) return toast.error("Email and password are required.");
+    
+    setLoading(true);
+    try {
+      // Invoke the function
+      const { data, error } = await supabase.functions.invoke('create-team-user', {
+        body: JSON.stringify({ email, password, role }), // Ensure it is explicitly stringified
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (error) throw error; // If the edge function returns a 400, it ends up here
+
+      toast.success(`Account created for ${email}`);
+      setEmail("");
+      setPassword("");
+      setRole("member");
+    } catch (err: any) {
+      console.error("Invocation error:", err);
+      toast.error(err.message ?? "Failed to create account.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6 max-w-xl">
+      <div>
+        <h3 className="font-display text-xl font-extrabold mb-1">CREATE TEAM ACCOUNT</h3>
+        <p className="text-sm text-[#A0A0A0]">Generate login credentials for team members or new admins.</p>
+      </div>
+      
+      <Card>
+        <form onSubmit={handleCreateAccount} className="space-y-4">
+          <div>
+            <Label>Email Address</Label>
+            <input 
+              type="email" 
+              className={inputCls} 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              placeholder="player@darkstar.gg"
+              required
+            />
+          </div>
+          
+          <div>
+            <Label>Temporary Password</Label>
+            <input 
+              type="password" 
+              className={inputCls} 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              placeholder="••••••••"
+              required
+              minLength={6}
+            />
+          </div>
+
+          <div>
+            <Label>System Role</Label>
+            <select 
+              className={inputCls} 
+              value={role} 
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="member">Team Member (Standard)</option>
+              <option value="admin">Administrator (Full Access)</option>
+            </select>
+          </div>
+
+          <div className="pt-4 flex justify-end">
+            <button 
+              type="submit" 
+              disabled={loading} 
+              className={btnPrimary + " disabled:opacity-50"}
+            >
+              {loading ? "CREATING..." : <><UserPlus className="h-4 w-4" /> CREATE ACCOUNT</>}
+            </button>
+          </div>
+        </form>
+      </Card>
+    </div>
+  );
 }
 
 /* ---------- Players ---------- */
@@ -280,6 +466,7 @@ function PlayersTab({ store, update }: { store: Store; update: (s: Store) => voi
 function PlayerForm({ initial, onSave, onCancel }: { initial: Player; onSave: (p: Player) => void; onCancel: () => void }) {
   const [p, setP] = useState<Player>(initial);
   const set = <K extends keyof Player>(k: K, v: Player[K]) => setP((s) => ({ ...s, [k]: v }));
+  
   const onPhoto = (file?: File) => {
     if (!file) return;
     const r = new FileReader();
@@ -294,7 +481,20 @@ function PlayerForm({ initial, onSave, onCancel }: { initial: Player; onSave: (p
           <h3 className="font-display text-xl font-extrabold">{initial.ign ? "EDIT PLAYER" : "NEW PLAYER"}</h3>
           <button onClick={onCancel} className={btnGhost}><X className="h-4 w-4" /></button>
         </div>
+        
         <div className="grid grid-cols-2 gap-3">
+          {/* --- New Linked Account Field --- */}
+          <div className="col-span-2 bg-white/5 p-3 rounded-lg border border-white/10 mb-2">
+            <Label className="text-[#00B8FF]">Linked Login Email</Label>
+            <input 
+              type="email"
+              className={inputCls} 
+              value={p.email || ""} 
+              onChange={(e) => set("email", e.target.value)} 
+              placeholder="e.g., player@darkstar.gg (Must match account created in Accounts tab)"
+            />
+          </div>
+
           <div><Label>IGN</Label><input className={inputCls} value={p.ign} onChange={(e) => set("ign", e.target.value)} /></div>
           <div><Label>Real Name</Label><input className={inputCls} value={p.realName} onChange={(e) => set("realName", e.target.value)} /></div>
           <div><Label>Player ID</Label><input className={inputCls} value={p.playerId} onChange={(e) => set("playerId", e.target.value)} /></div>
@@ -310,11 +510,13 @@ function PlayerForm({ initial, onSave, onCancel }: { initial: Player; onSave: (p
           <div><Label>Win Rate %</Label><input type="number" className={inputCls} value={p.winRate} onChange={(e) => set("winRate", +e.target.value)} /></div>
           <div><Label>Matches</Label><input type="number" className={inputCls} value={p.matches} onChange={(e) => set("matches", +e.target.value)} /></div>
           <div><Label>Tournament Wins</Label><input type="number" className={inputCls} value={p.tournamentWins} onChange={(e) => set("tournamentWins", +e.target.value)} /></div>
+          
           <div className="flex items-end gap-2">
-            <label className="inline-flex items-center gap-2 text-sm">
+            <label className="inline-flex items-center gap-2 text-sm text-white">
               <input type="checkbox" checked={p.verified} onChange={(e) => set("verified", e.target.checked)} /> Verified
             </label>
           </div>
+          
           <div className="col-span-2">
             <Label>Photo</Label>
             <div className="flex items-center gap-3">
@@ -323,6 +525,7 @@ function PlayerForm({ initial, onSave, onCancel }: { initial: Player; onSave: (p
             </div>
           </div>
         </div>
+        
         <div className="mt-6 flex justify-end gap-2">
           <button onClick={onCancel} className={btnGhost}>Cancel</button>
           <button onClick={() => onSave(p)} className={btnPrimary}><Save className="h-4 w-4" /> Save</button>

@@ -14,6 +14,7 @@ import { Route as RosterRouteImport } from './routes/roster'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as MediaRouteImport } from './routes/media'
 import { Route as DeathsirenRouteImport } from './routes/deathsiren'
+import { Route as DarkstarRouteImport } from './routes/darkstar'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -45,6 +46,11 @@ const MediaRoute = MediaRouteImport.update({
 const DeathsirenRoute = DeathsirenRouteImport.update({
   id: '/deathsiren',
   path: '/deathsiren',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DarkstarRoute = DarkstarRouteImport.update({
+  id: '/darkstar',
+  path: '/darkstar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/darkstar': typeof DarkstarRoute
   '/deathsiren': typeof DeathsirenRoute
   '/media': typeof MediaRoute
   '/news': typeof NewsRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/darkstar': typeof DarkstarRoute
   '/deathsiren': typeof DeathsirenRoute
   '/media': typeof MediaRoute
   '/news': typeof NewsRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/darkstar': typeof DarkstarRoute
   '/deathsiren': typeof DeathsirenRoute
   '/media': typeof MediaRoute
   '/news': typeof NewsRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/contact'
+    | '/darkstar'
     | '/deathsiren'
     | '/media'
     | '/news'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/contact'
+    | '/darkstar'
     | '/deathsiren'
     | '/media'
     | '/news'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/contact'
+    | '/darkstar'
     | '/deathsiren'
     | '/media'
     | '/news'
@@ -173,6 +185,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
+  DarkstarRoute: typeof DarkstarRoute
   DeathsirenRoute: typeof DeathsirenRoute
   MediaRoute: typeof MediaRoute
   NewsRoute: typeof NewsRoute
@@ -215,6 +228,13 @@ declare module '@tanstack/react-router' {
       path: '/deathsiren'
       fullPath: '/deathsiren'
       preLoaderRoute: typeof DeathsirenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/darkstar': {
+      id: '/darkstar'
+      path: '/darkstar'
+      fullPath: '/darkstar'
+      preLoaderRoute: typeof DarkstarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -287,6 +307,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
+  DarkstarRoute: DarkstarRoute,
   DeathsirenRoute: DeathsirenRoute,
   MediaRoute: MediaRoute,
   NewsRoute: NewsRoute,
@@ -296,3 +317,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

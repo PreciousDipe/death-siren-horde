@@ -11,10 +11,10 @@ const tabs: Filter[] = ["ALL", ...ROLES];
 export const Route = createFileRoute("/roster")({
   head: () => ({
     meta: [
-      { title: "Our Players — Darkstar Roster" },
-      { name: "description", content: "Meet the Darkstar Mobile Legends roster — the players carrying Nigeria's elite esports squad." },
-      { property: "og:title", content: "Darkstar Roster" },
-      { property: "og:description", content: "Meet the heart of our organization — the Darkstar active roster." },
+      { title: "Our Players — Darkstar Community" },
+      { name: "description", content: "Meet all players in the Darkstar Community." },
+      { property: "og:title", content: "Darkstar Community Roster" },
+      { property: "og:description", content: "All players across the Darkstar Community squads." },
     ],
   }),
   component: RosterPage,
@@ -23,18 +23,21 @@ export const Route = createFileRoute("/roster")({
 function RosterPage() {
   const [active, setActive] = useState<Filter>("ALL");
   const [selected, setSelected] = useState<Player | null>(null);
-  const filtered = useMemo(
-    () => (active === "ALL" ? players : players.filter((p) => p.role === active)),
-    [active]
-  );
+
+  // ─── Show ALL players from all squads ────────────────────────────────────
+  const filtered = useMemo(() => {
+    return active === "ALL"
+      ? players
+      : players.filter((p) => p.role === active);
+  }, [active]);
 
   return (
     <SiteShell>
       <section className="mx-auto max-w-7xl px-4 md:px-6 pt-16 pb-8">
-        <span className="text-xs font-bold tracking-[0.3em] text-[#00B8FF]">/ THE SQUAD</span>
-        <h1 className="mt-2 font-display text-4xl md:text-6xl font-extrabold">OUR PLAYERS</h1>
+        <span className="text-xs font-bold tracking-[0.3em] text-[#00B8FF]">/ THE COMMUNITY</span>
+        <h1 className="mt-2 font-display text-4xl md:text-6xl font-extrabold">ALL PLAYERS</h1>
         <p className="mt-3 text-base md:text-lg text-[#A0A0A0] italic font-semibold">
-          Team Members of Darkstar
+          All Team Members of the Darkstar Community
         </p>
       </section>
 

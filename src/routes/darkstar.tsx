@@ -8,25 +8,25 @@ import { players, ROLES, type Role, type Player } from "@/data/players";
 type Filter = "ALL" | Role;
 const tabs: Filter[] = ["ALL", ...ROLES];
 
-export const Route = createFileRoute("/deathsiren")({
+export const Route = createFileRoute("/darkstar")({
   head: () => ({
     meta: [
-      { title: "Our Players — Deathsiren Roster" },
-      { name: "description", content: "Meet the Deathsiren Mobile Legends roster." },
-      { property: "og:title", content: "Deathsiren Roster" },
-      { property: "og:description", content: "Meet the heart of our organization — the Deathsiren active roster." },
+      { title: "Our Players — Darkstar Squad" },
+      { name: "description", content: "Meet the Darkstar squad players." },
+      { property: "og:title", content: "Darkstar Squad" },
+      { property: "og:description", content: "The Darkstar main squad roster." },
     ],
   }),
-  component: RosterPage,
+  component: DarkstarPage,
 });
 
-function RosterPage() {
+function DarkstarPage() {
   const [active, setActive] = useState<Filter>("ALL");
   const [selected, setSelected] = useState<Player | null>(null);
 
-  // ─── Only show DEATHSIREN squad players ──────────────────────────────────
+  // ─── Only show DARKSTAR squad players ────────────────────────────────────
   const filtered = useMemo(() => {
-    const squadPlayers = players.filter((p) => p.squad === "DEATHSIREN");
+    const squadPlayers = players.filter((p) => p.squad === "DARKSTAR");
     return active === "ALL"
       ? squadPlayers
       : squadPlayers.filter((p) => p.role === active);
@@ -38,7 +38,7 @@ function RosterPage() {
         <span className="text-xs font-bold tracking-[0.3em] text-[#00B8FF]">/ THE SQUAD</span>
         <h1 className="mt-2 font-display text-4xl md:text-6xl font-extrabold">OUR PLAYERS</h1>
         <p className="mt-3 text-base md:text-lg text-[#A0A0A0] italic font-semibold">
-          Team Members of Deathsiren
+          Team Members of Darkstar
         </p>
       </section>
 
