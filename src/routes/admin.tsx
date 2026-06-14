@@ -60,6 +60,7 @@ const defaultStore = (): Store => ({
     aboutText: "Darkstar is Nigeria's premier Mobile Legends esports organization.",
     logoUrl: logo,
     instagram: "https://instagram.com/dark_stars164",
+    twitter: "",
     tiktok: "https://tiktok.com/@darkstar_esport",
     discord: "https://discord.gg/ENm2RYJ4u",
     email: "darkstaresports1@gmail.com",
