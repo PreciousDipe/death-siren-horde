@@ -172,9 +172,16 @@ export function Navbar() {
             );
           })}
           <Link
+            to="/auth"
+            onClick={() => setOpen(false)}
+            className="mt-3 inline-flex items-center justify-center rounded-md border border-white/15 h-11 font-display text-xs font-bold uppercase tracking-[0.16em] text-white"
+          >
+            Team Login
+          </Link>
+          <Link
             to="/contact"
             onClick={() => setOpen(false)}
-            className="mt-3 inline-flex items-center justify-center rounded-md bg-[#8B3DFF] h-11 font-display text-xs font-bold uppercase tracking-[0.16em] text-white"
+            className="mt-2 inline-flex items-center justify-center rounded-md bg-[#8B3DFF] h-11 font-display text-xs font-bold uppercase tracking-[0.16em] text-white"
           >
             Join DARKSTAR
           </Link>
