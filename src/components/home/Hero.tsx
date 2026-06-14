@@ -40,30 +40,32 @@ export function Hero() {
 
       {/* FIXED FRAME FOR IMAGES AND WATERMARKS */}
       <div className="relative -z-10 w-full">
-        {/* Slider Images */}
-        {slides.map((slide, i) => (
-          <img
-            key={i}
-            src={slide.image}
-            alt={slide.alt}
-            className={`w-full transition-all duration-1000 ease-out ${
-              // The active image controls the height layout (relative), inactive ones float behind (absolute)
-              i === current ? "relative block" : "absolute inset-0 invisible"
-            } ${
-              i === 0 
-                ? "object-cover object-center h-[90vh] lg:h-screen" // Slide 0: Main homepage logo view
-                : i === 1 
-                  ? "object-contain object-top bg-[#080808] h-auto max-h-[75vh]" // Slide 1: Fits all 5 people completely
-                  : "object-cover object-[center_25%] h-[180vh]" // Slide 2: Full screen format, focused on faces
-            } ${
-              i === current
-                ? `${i === 1 || i === 2 ? "opacity-100" : "opacity-30"} scale-100`
-                : "opacity-0 scale-105"
+        {/* Slider Images — only slide 0 on mobile (group photos hidden) */}
+        {slides.map((slide, i) => {
+          if (isMobile && i !== 0) return null;
+          return (
+            <img
+              key={i}
+              src={slide.image}
+              alt={slide.alt}
+              className={`w-full transition-all duration-1000 ease-out ${
+                i === current ? "relative block" : "absolute inset-0 invisible"
+              } ${
+                i === 0
+                  ? "object-cover object-center h-[90vh] lg:h-screen"
+                  : i === 1
+                    ? "object-contain object-top bg-[#080808] h-auto max-h-[75vh]"
+                    : "object-cover object-[center_25%] h-[180vh]"
+              } ${
+                i === current
+                  ? `${i === 1 || i === 2 ? "opacity-100" : "opacity-30"} scale-100`
+                  : "opacity-0 scale-105"
               }`}
-            width={1920}
-            height={1100}
-          />
-        ))}
+              width={1920}
+              height={1100}
+            />
+          );
+        })}
 
         {/* Side watermarks - STARTED DIRECTLY UNDER NAVBAR */}
         <div className="pointer-events-none absolute bottom-0 top-[10px] left-0 z-0 hidden md:flex items-start overflow-hidden w-fit">
