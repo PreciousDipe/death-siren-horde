@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "death-siren-horde",
+  "name": "darkstaresports",
   "compatibility_date": "2026-06-09",
   "compatibility_flags": ["nodejs_compat"],
   "main": "dist/server/server.js",
