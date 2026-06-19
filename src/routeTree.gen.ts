@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TournamentsRouteImport } from './routes/tournaments'
+import { Route as StatsRouteImport } from './routes/stats'
 import { Route as RosterRouteImport } from './routes/roster'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as MediaRouteImport } from './routes/media'
@@ -26,6 +27,11 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 const TournamentsRoute = TournamentsRouteImport.update({
   id: '/tournaments',
   path: '/tournaments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatsRoute = StatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RosterRoute = RosterRouteImport.update({
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/media': typeof MediaRoute
   '/news': typeof NewsRoute
   '/roster': typeof RosterRoute
+  '/stats': typeof StatsRoute
   '/tournaments': typeof TournamentsRoute
   '/profile': typeof AuthenticatedProfileRoute
 }
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/media': typeof MediaRoute
   '/news': typeof NewsRoute
   '/roster': typeof RosterRoute
+  '/stats': typeof StatsRoute
   '/tournaments': typeof TournamentsRoute
   '/profile': typeof AuthenticatedProfileRoute
 }
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/media': typeof MediaRoute
   '/news': typeof NewsRoute
   '/roster': typeof RosterRoute
+  '/stats': typeof StatsRoute
   '/tournaments': typeof TournamentsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
 }
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/news'
     | '/roster'
+    | '/stats'
     | '/tournaments'
     | '/profile'
   fileRoutesByTo: FileRoutesByTo
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/news'
     | '/roster'
+    | '/stats'
     | '/tournaments'
     | '/profile'
   id:
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/news'
     | '/roster'
+    | '/stats'
     | '/tournaments'
     | '/_authenticated/profile'
   fileRoutesById: FileRoutesById
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   MediaRoute: typeof MediaRoute
   NewsRoute: typeof NewsRoute
   RosterRoute: typeof RosterRoute
+  StatsRoute: typeof StatsRoute
   TournamentsRoute: typeof TournamentsRoute
 }
 
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       path: '/tournaments'
       fullPath: '/tournaments'
       preLoaderRoute: typeof TournamentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stats': {
+      id: '/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof StatsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roster': {
@@ -312,6 +332,7 @@ const rootRouteChildren: RootRouteChildren = {
   MediaRoute: MediaRoute,
   NewsRoute: NewsRoute,
   RosterRoute: RosterRoute,
+  StatsRoute: StatsRoute,
   TournamentsRoute: TournamentsRoute,
 }
 export const routeTree = rootRouteImport
