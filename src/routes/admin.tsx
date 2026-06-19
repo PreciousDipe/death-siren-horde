@@ -88,30 +88,13 @@ function AdminPage() {
 
   useEffect(() => {
     async function checkAuth() {
-      // Get current Supabase user
       const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user) {
-        setReady(true);
-        return;
-      }
-
-      // Check if user has admin role in profiles table
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
-
-      if (error || profile?.role !== "admin") {
-        setReady(true);
-        return;
-      }
-
+      if (!user) { setReady(true); return; }
+      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
+      if (!isAdmin) { setReady(true); return; }
       setAuthed(true);
       setReady(true);
     }
-
     checkAuth();
   }, []);
 
