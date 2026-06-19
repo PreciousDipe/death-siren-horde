@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   LogOut, Users, Trophy, Newspaper, Image as ImageIcon, Award, Settings as SettingsIcon,
-  Plus, Pencil, Trash2, Save, X, UserPlus
+  Plus, Pencil, Trash2, Save, X, UserPlus, BarChart3, MessageSquare,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { players as seedPlayers, ROLES, type Player, type Role } from "@/data/players";
 import { supabase } from "@/integrations/supabase/client";
+import { MatchStatsTab } from "@/components/admin/MatchStatsTab";
+import { MessagesTab } from "@/components/admin/MessagesTab";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({

@@ -14,6 +14,7 @@ const links = [
     ],
   },
   { to: "/tournaments", label: "Tournaments" },
+  { to: "/stats", label: "Stats" },
   { to: "/achievements", label: "Achievements" },
   { to: "/media", label: "Media" },
   { to: "/news", label: "News" },
