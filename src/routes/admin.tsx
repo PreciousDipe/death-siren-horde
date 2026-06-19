@@ -198,7 +198,9 @@ function Login({ onLogin }: { onLogin: () => void }) {
 
 const TABS = [
   { id: "players", label: "Team", Icon: Users },
-  { id: "accounts", label: "Accounts", Icon: UserPlus }, // New Accounts Tab added here
+  { id: "accounts", label: "Accounts", Icon: UserPlus },
+  { id: "matchstats", label: "Match Stats", Icon: BarChart3 },
+  { id: "messages", label: "Messages", Icon: MessageSquare },
   { id: "tournaments", label: "Tournaments", Icon: Trophy },
   { id: "achievements", label: "Achievements", Icon: Award },
   { id: "news", label: "News", Icon: Newspaper },
@@ -259,6 +261,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         <main className="p-4 md:p-8 flex-1">
           {tab === "players" && <PlayersTab store={store} update={update} />}
           {tab === "accounts" && <AccountsTab />}
+          {tab === "matchstats" && <MatchStatsTab />}
+          {tab === "messages" && <MessagesTab />}
           {tab === "tournaments" && <TournamentsTab store={store} update={update} />}
           {tab === "achievements" && <AchievementsTab store={store} update={update} />}
           {tab === "news" && <NewsTab store={store} update={update} />}
