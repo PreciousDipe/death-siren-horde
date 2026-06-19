@@ -384,7 +384,7 @@ function AccountsTab() {
 function PlayersTab({ store, update }: { store: Store; update: (s: Store) => void }) {
   const [editing, setEditing] = useState<Player | null>(null);
   const blank = (): Player => ({
-    ign: "", realName: "", role: "MID LANE", photo: logo, verified: false,
+    ign: "", realName: "", role: "MID LANE", squad: "DARKSTAR", photo: logo, verified: false,
     playerId: "", nationality: "Nigeria", flag: "🇳🇬", age: 18, yearsActive: 1,
     winRate: 50, matches: 0, tournamentWins: 0,
   });
