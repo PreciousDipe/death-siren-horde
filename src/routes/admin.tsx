@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   LogOut, Users, Trophy, Newspaper, Image as ImageIcon, Award, Settings as SettingsIcon,
-  Plus, Pencil, Trash2, Save, X, UserPlus
+  Plus, Pencil, Trash2, Save, X, UserPlus, BarChart3, MessageSquare,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { players as seedPlayers, ROLES, type Player, type Role } from "@/data/players";
 import { supabase } from "@/integrations/supabase/client";
+import { MatchStatsTab } from "@/components/admin/MatchStatsTab";
+import { MessagesTab } from "@/components/admin/MessagesTab";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -88,30 +90,13 @@ function AdminPage() {
 
   useEffect(() => {
     async function checkAuth() {
-      // Get current Supabase user
       const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user) {
-        setReady(true);
-        return;
-      }
-
-      // Check if user has admin role in profiles table
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
-
-      if (error || profile?.role !== "admin") {
-        setReady(true);
-        return;
-      }
-
+      if (!user) { setReady(true); return; }
+      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
+      if (!isAdmin) { setReady(true); return; }
       setAuthed(true);
       setReady(true);
     }
-
     checkAuth();
   }, []);
 
@@ -149,14 +134,8 @@ function Login({ onLogin }: { onLogin: () => void }) {
 
       if (error) throw error;
 
-      // Check if user has admin role
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", data.user.id)
-        .single();
-
-      if (profileError || profile?.role !== "admin") {
+      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" });
+      if (!isAdmin) {
         await supabase.auth.signOut();
         toast.error("Access denied. Admin privileges required.");
         return;
@@ -219,7 +198,9 @@ function Login({ onLogin }: { onLogin: () => void }) {
 
 const TABS = [
   { id: "players", label: "Team", Icon: Users },
-  { id: "accounts", label: "Accounts", Icon: UserPlus }, // New Accounts Tab added here
+  { id: "accounts", label: "Accounts", Icon: UserPlus },
+  { id: "matchstats", label: "Match Stats", Icon: BarChart3 },
+  { id: "messages", label: "Messages", Icon: MessageSquare },
   { id: "tournaments", label: "Tournaments", Icon: Trophy },
   { id: "achievements", label: "Achievements", Icon: Award },
   { id: "news", label: "News", Icon: Newspaper },
@@ -280,6 +261,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         <main className="p-4 md:p-8 flex-1">
           {tab === "players" && <PlayersTab store={store} update={update} />}
           {tab === "accounts" && <AccountsTab />}
+          {tab === "matchstats" && <MatchStatsTab />}
+          {tab === "messages" && <MessagesTab />}
           {tab === "tournaments" && <TournamentsTab store={store} update={update} />}
           {tab === "achievements" && <AchievementsTab store={store} update={update} />}
           {tab === "news" && <NewsTab store={store} update={update} />}
@@ -407,7 +390,7 @@ function AccountsTab() {
 function PlayersTab({ store, update }: { store: Store; update: (s: Store) => void }) {
   const [editing, setEditing] = useState<Player | null>(null);
   const blank = (): Player => ({
-    ign: "", realName: "", role: "MID LANE", photo: logo, verified: false,
+    ign: "", realName: "", role: "MID LANE", squad: "DARKSTAR", photo: logo, verified: false,
     playerId: "", nationality: "Nigeria", flag: "🇳🇬", age: 18, yearsActive: 1,
     winRate: 50, matches: 0, tournamentWins: 0,
   });

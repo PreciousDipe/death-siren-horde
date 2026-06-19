@@ -14,6 +14,116 @@ export type Database = {
   }
   public: {
     Tables: {
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          handled: boolean
+          id: string
+          ign: string | null
+          message: string
+          name: string
+          role: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          handled?: boolean
+          id?: string
+          ign?: string | null
+          message: string
+          name: string
+          role?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          handled?: boolean
+          id?: string
+          ign?: string | null
+          message?: string
+          name?: string
+          role?: string | null
+        }
+        Relationships: []
+      }
+      match_stats: {
+        Row: {
+          assists: number
+          battle_id: string | null
+          created_at: string
+          damage_taken: number
+          deaths: number
+          duration_minutes: number | null
+          gold: number
+          hero: string
+          hero_damage: number
+          id: string
+          is_mvp: boolean
+          kills: number
+          match_date: string
+          notes: string | null
+          player_id: string
+          result: string
+          role: string
+          teamfight_participation: number
+          turret_damage: number
+          updated_at: string
+        }
+        Insert: {
+          assists?: number
+          battle_id?: string | null
+          created_at?: string
+          damage_taken?: number
+          deaths?: number
+          duration_minutes?: number | null
+          gold?: number
+          hero: string
+          hero_damage?: number
+          id?: string
+          is_mvp?: boolean
+          kills?: number
+          match_date?: string
+          notes?: string | null
+          player_id: string
+          result: string
+          role: string
+          teamfight_participation?: number
+          turret_damage?: number
+          updated_at?: string
+        }
+        Update: {
+          assists?: number
+          battle_id?: string | null
+          created_at?: string
+          damage_taken?: number
+          deaths?: number
+          duration_minutes?: number | null
+          gold?: number
+          hero?: string
+          hero_damage?: number
+          id?: string
+          is_mvp?: boolean
+          kills?: number
+          match_date?: string
+          notes?: string | null
+          player_id?: string
+          result?: string
+          role?: string
+          teamfight_participation?: number
+          turret_damage?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_stats_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           bio: string | null

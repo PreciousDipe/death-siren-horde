@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Mail, MessageCircle, Send } from "lucide-react";
+import { Mail, MessageCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -18,6 +19,37 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", role: "", ign: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.name.trim() || !form.email.includes("@")) {
+      toast.error("Please provide a name and valid email");
+      return;
+    }
+    if (!form.message.trim()) {
+      toast.error("Please write a message");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from("contact_messages").insert({
+        name: form.name.trim().slice(0, 120),
+        email: form.email.trim().slice(0, 255),
+        role: form.role || null,
+        ign: form.ign.trim() || null,
+        message: form.message.trim().slice(0, 4000),
+      });
+      if (error) throw error;
+      toast.success("Thanks! The squad will reach out via email soon.");
+      setForm({ name: "", email: "", role: "", ign: "", message: "" });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to send";
+      toast.error(msg);
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <SiteShell>
@@ -28,45 +60,37 @@ function ContactPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 md:px-6 py-8 grid gap-8 lg:grid-cols-[1fr_320px]">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!form.name || !form.email.includes("@")) {
-              toast.error("Please provide a name and valid email");
-              return;
-            }
-            if (!form.role) {
-              toast.error("Please select a role");
-              return;
-            }
-            toast.success("Thanks! The squad will reach out soon.");
-            setForm({ name: "", email: "", role: "", ign: "", message: "" });
-          }}
-          className="rounded-xl border border-white/5 bg-[#181818] p-6 md:p-8 space-y-4"
-        >
+        <form onSubmit={handleSubmit} className="rounded-xl border border-white/5 bg-[#181818] p-6 md:p-8 space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="Full Name" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
-            {/* <Field label="Role" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} /> */}
-            <Field label="Role" type="select" value={form.role} onChange={(v) => setForm({ ...form, role: v })} options={["Marksman", "Mage", "Jungle", "Roam", "Exp"]} />
-
+            <Field label="Your Email" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
           </div>
-          <Field label="In-Game Name (IGN)" value={form.ign} onChange={(v) => setForm({ ...form, ign: v })} />
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field label="Role" type="select" value={form.role} onChange={(v) => setForm({ ...form, role: v })} options={["Marksman", "Mage", "Jungle", "Roam", "Exp", "Other / Partnership"]} />
+            <Field label="In-Game Name (IGN)" value={form.ign} onChange={(v) => setForm({ ...form, ign: v })} />
+          </div>
           <div>
             <label className="text-[11px] font-bold tracking-[0.2em] text-[#A0A0A0]">MESSAGE</label>
             <textarea
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               rows={6}
+              maxLength={4000}
+              required
               className="mt-2 w-full rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm text-white placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#00B8FF]"
-              placeholder="Tell us about your experience playing mobile legends and why you're interested in joining Darkstar..."
+              placeholder="Tell us about your experience playing Mobile Legends and why you're interested in joining Darkstar..."
             />
           </div>
           <button
             type="submit"
-            className="inline-flex h-12 items-center justify-center rounded-md bg-[#8B3DFF] px-8 font-display text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_0_24px_rgba(139,61,255,0.5)] hover:brightness-110"
+            disabled={submitting}
+            className="inline-flex h-12 items-center justify-center rounded-md bg-[#8B3DFF] px-8 font-display text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_0_24px_rgba(139,61,255,0.5)] hover:brightness-110 disabled:opacity-60"
           >
-            Submit Application
+            {submitting ? "Sending..." : "Submit Application"}
           </button>
+          <p className="text-[11px] text-[#A0A0A0]">
+            Your email will be used only to respond to your message. We'll reply from darkstaresports1@gmail.com.
+          </p>
         </form>
 
         <aside className="space-y-3">
@@ -78,9 +102,9 @@ function ContactPage() {
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-[#00B8FF]/10 text-[#00B8FF] ring-1 ring-[#00B8FF]/30">
                 <Icon className="h-5 w-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="text-[11px] font-bold tracking-[0.2em] text-[#A0A0A0]">{label}</div>
-                <div className="text-sm font-semibold">{value}</div>
+                <div className="text-sm font-semibold truncate">{value}</div>
               </div>
             </div>
           ))}
@@ -89,6 +113,7 @@ function ContactPage() {
     </SiteShell>
   );
 }
+
 
 function Field({
   label,
