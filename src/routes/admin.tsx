@@ -132,14 +132,8 @@ function Login({ onLogin }: { onLogin: () => void }) {
 
       if (error) throw error;
 
-      // Check if user has admin role
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", data.user.id)
-        .single();
-
-      if (profileError || profile?.role !== "admin") {
+      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" });
+      if (!isAdmin) {
         await supabase.auth.signOut();
         toast.error("Access denied. Admin privileges required.");
         return;
