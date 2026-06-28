@@ -124,6 +124,117 @@ export type Database = {
           },
         ]
       }
+      news_items: {
+        Row: {
+          category: string | null
+          content: string | null
+          created_at: string
+          date: string
+          id: string
+          image_url: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          content?: string | null
+          created_at?: string
+          date: string
+          id?: string
+          image_url?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          content?: string | null
+          created_at?: string
+          date?: string
+          id?: string
+          image_url?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      players: {
+        Row: {
+          age: number | null
+          created_at: string
+          email: string | null
+          flag: string | null
+          id: string
+          ign: string
+          instagram: string | null
+          matches: number | null
+          nationality: string | null
+          photo_url: string | null
+          player_id: string | null
+          real_name: string
+          role: string
+          sort_order: number
+          squad: string
+          tournament_wins: number | null
+          twitter: string | null
+          updated_at: string
+          verified: boolean
+          win_rate: number | null
+          years_active: number | null
+          youtube: string | null
+        }
+        Insert: {
+          age?: number | null
+          created_at?: string
+          email?: string | null
+          flag?: string | null
+          id?: string
+          ign: string
+          instagram?: string | null
+          matches?: number | null
+          nationality?: string | null
+          photo_url?: string | null
+          player_id?: string | null
+          real_name: string
+          role: string
+          sort_order?: number
+          squad: string
+          tournament_wins?: number | null
+          twitter?: string | null
+          updated_at?: string
+          verified?: boolean
+          win_rate?: number | null
+          years_active?: number | null
+          youtube?: string | null
+        }
+        Update: {
+          age?: number | null
+          created_at?: string
+          email?: string | null
+          flag?: string | null
+          id?: string
+          ign?: string
+          instagram?: string | null
+          matches?: number | null
+          nationality?: string | null
+          photo_url?: string | null
+          player_id?: string | null
+          real_name?: string
+          role?: string
+          sort_order?: number
+          squad?: string
+          tournament_wins?: number | null
+          twitter?: string | null
+          updated_at?: string
+          verified?: boolean
+          win_rate?: number | null
+          years_active?: number | null
+          youtube?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bio: string | null
@@ -166,6 +277,102 @@ export type Database = {
           twitter?: string | null
           updated_at?: string
           youtube?: string | null
+        }
+        Relationships: []
+      }
+      tournament_meta: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          tag: string | null
+          target_date: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          tag?: string | null
+          target_date: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          tag?: string | null
+          target_date?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tournament_schedule: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          opponent: string
+          sort_order: number
+          time: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          opponent: string
+          sort_order?: number
+          time?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          opponent?: string
+          sort_order?: number
+          time?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tournament_standings: {
+        Row: {
+          created_at: string
+          highlight: boolean
+          id: string
+          l: number
+          pts: number
+          sort_order: number
+          team: string
+          updated_at: string
+          w: number
+        }
+        Insert: {
+          created_at?: string
+          highlight?: boolean
+          id?: string
+          l?: number
+          pts?: number
+          sort_order?: number
+          team: string
+          updated_at?: string
+          w?: number
+        }
+        Update: {
+          created_at?: string
+          highlight?: boolean
+          id?: string
+          l?: number
+          pts?: number
+          sort_order?: number
+          team?: string
+          updated_at?: string
+          w?: number
         }
         Relationships: []
       }
