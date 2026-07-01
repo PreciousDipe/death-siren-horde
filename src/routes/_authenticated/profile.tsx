@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { toast } from "sonner";
+import { getSignedUrl, uploadAvatar } from "@/lib/storage";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({ meta: [{ title: "My Profile — Darkstar" }] }),
