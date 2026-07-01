@@ -164,7 +164,6 @@ export type Database = {
         Row: {
           age: number | null
           created_at: string
-          email: string | null
           flag: string | null
           id: string
           ign: string
@@ -188,7 +187,6 @@ export type Database = {
         Insert: {
           age?: number | null
           created_at?: string
-          email?: string | null
           flag?: string | null
           id?: string
           ign: string
@@ -212,7 +210,6 @@ export type Database = {
         Update: {
           age?: number | null
           created_at?: string
-          email?: string | null
           flag?: string | null
           id?: string
           ign?: string

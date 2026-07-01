@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Play, ChevronLeft, ChevronRight, MessageCircle, Send, Instagram, Music2, Facebook, Twitter } from "lucide-react";
+import { ArrowRight, Play, ChevronLeft, ChevronRight, MessageCircle, Instagram, Music2, Facebook, Twitter } from "lucide-react";
 import { useState } from "react";
-import { news } from "@/data/news";
-import { players } from "@/data/players";
+import { useNews, usePlayers } from "@/lib/hooks/use-team-data";
+import { Skeleton } from "@/components/ui/skeleton";
+import logo from "@/assets/logo.png";
 import g1 from "@/assets/gallery-1.jpg";
 import g2 from "@/assets/gallery-2.jpg";
 import g3 from "@/assets/gallery-3.jpg";
 import g4 from "@/assets/gallery-4.jpg";
-import mvpImg from "@/assets/mvp.jpg";
 
 const gallery = [
   { src: g1, video: false },
@@ -17,11 +17,11 @@ const gallery = [
 ];
 
 export function BottomGrid() {
+  const { data: news = [], isLoading: newsLoading } = useNews();
+  const { data: players = [], isLoading: playersLoading } = usePlayers();
   const mvpPool = players.slice(0, 4);
   const [mvpIdx, setMvpIdx] = useState(0);
-  const mvp = mvpPool[mvpIdx];
-  const cyclePool = [{ ...mvp, photo: mvpImg }, ...mvpPool.slice(1)];
-  const featured = mvpIdx === 0 ? cyclePool[0] : mvpPool[mvpIdx];
+  const featured = mvpPool[mvpIdx] ?? null;
 
   return (
     <section className="mx-auto max-w-7xl px-4 md:px-6 py-20">
@@ -34,17 +34,41 @@ export function BottomGrid() {
               View All <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
-          <ul className="space-y-4">
-            {news.map((n) => (
-              <li key={n.title} className="flex gap-3 group">
-                <img src={n.image} alt="" className="h-16 w-20 flex-none rounded-md object-cover" width={80} height={64} loading="lazy" />
-                <div>
-                  <p className="text-sm font-semibold leading-snug text-white group-hover:text-[#00B8FF] transition-colors line-clamp-2">{n.title}</p>
-                  <p className="mt-1 text-[11px] text-[#A0A0A0]">{n.date}</p>
+          {newsLoading ? (
+            <div className="space-y-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="flex gap-3">
+                  <Skeleton className="h-16 w-20 flex-none rounded-md" />
+                  <div className="flex-1 space-y-2 py-1">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-3 w-20" />
+                  </div>
                 </div>
-              </li>
-            ))}
-          </ul>
+              ))}
+            </div>
+          ) : news.length === 0 ? (
+            <p className="text-sm text-[#A0A0A0]">No news yet.</p>
+          ) : (
+            <ul className="space-y-4">
+              {news.slice(0, 3).map((n) => (
+                <li key={n.id} className="flex gap-3 group">
+                  <img
+                    src={n.image || logo}
+                    alt=""
+                    className="h-16 w-20 flex-none rounded-md object-cover bg-[#0c0c0c]"
+                    width={80}
+                    height={64}
+                    loading="lazy"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = logo; }}
+                  />
+                  <div>
+                    <p className="text-sm font-semibold leading-snug text-white group-hover:text-[#00B8FF] transition-colors line-clamp-2">{n.title}</p>
+                    <p className="mt-1 text-[11px] text-[#A0A0A0]">{n.date}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* Media gallery */}
@@ -77,29 +101,45 @@ export function BottomGrid() {
             <h3 className="font-display text-lg font-extrabold tracking-wider">MVP SPOTLIGHT</h3>
             <div className="flex gap-1">
               <button
-                onClick={() => setMvpIdx((i) => (i - 1 + mvpPool.length) % mvpPool.length)}
+                onClick={() => setMvpIdx((i) => (i - 1 + Math.max(mvpPool.length, 1)) % Math.max(mvpPool.length, 1))}
                 aria-label="Previous"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10 text-white/80 hover:text-[#00B8FF] hover:border-[#00B8FF]/60"
+                disabled={mvpPool.length === 0}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10 text-white/80 hover:text-[#00B8FF] hover:border-[#00B8FF]/60 disabled:opacity-40"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
-                onClick={() => setMvpIdx((i) => (i + 1) % mvpPool.length)}
+                onClick={() => setMvpIdx((i) => (i + 1) % Math.max(mvpPool.length, 1))}
                 aria-label="Next"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10 text-white/80 hover:text-[#00B8FF] hover:border-[#00B8FF]/60"
+                disabled={mvpPool.length === 0}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10 text-white/80 hover:text-[#00B8FF] hover:border-[#00B8FF]/60 disabled:opacity-40"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
           </div>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-md">
-            <img src={featured.photo} alt={featured.ign} className="h-full w-full object-cover" width={400} height={500} loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-transparent" />
-            <div className="absolute bottom-3 left-3 right-3">
-              <div className="font-display text-xl font-extrabold uppercase">{featured.ign}</div>
-              <div className="text-[11px] text-[#A0A0A0]">MVP — Playoffs Week 4</div>
+          {playersLoading ? (
+            <Skeleton className="aspect-[4/5] rounded-md" />
+          ) : featured ? (
+            <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-[#0c0c0c]">
+              <img
+                src={featured.photo || logo}
+                alt={featured.ign}
+                className="h-full w-full object-cover"
+                width={400}
+                height={500}
+                loading="lazy"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).src = logo; }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-transparent" />
+              <div className="absolute bottom-3 left-3 right-3">
+                <div className="font-display text-xl font-extrabold uppercase">{featured.ign}</div>
+                <div className="text-[11px] text-[#A0A0A0]">MVP — Playoffs Week 4</div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <p className="text-sm text-[#A0A0A0]">No player available.</p>
+          )}
         </div>
 
         {/* Community */}
@@ -110,9 +150,6 @@ export function BottomGrid() {
             <a href="#" className="flex items-center justify-center gap-2 h-11 rounded-md bg-[#1e2a78] font-display text-xs font-bold uppercase tracking-[0.16em] text-white hover:brightness-110 transition">
               <MessageCircle className="h-4 w-4" /> Join Discord
             </a>
-            {/* <a href="#" className="flex items-center justify-center gap-2 h-11 rounded-md bg-[#1aa64b] font-display text-xs font-bold uppercase tracking-[0.16em] text-white hover:brightness-110 transition">
-              <Send className="h-4 w-4" /> WhatsApp Group
-            </a> */}
           </div>
           <div className="mt-5 flex items-center gap-2">
             {[Instagram, Music2, Facebook, Twitter].map((Icon, i) => (

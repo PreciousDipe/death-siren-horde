@@ -1,11 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { players, type Player } from "@/data/players";
+import { type Player } from "@/data/players";
+import { usePlayers } from "@/lib/hooks/use-team-data";
 import { PlayerCard } from "@/components/roster/PlayerCard";
 import { PlayerModal } from "@/components/roster/PlayerModal";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight } from "lucide-react";
 
 export function RosterPreview() {
+  const { data: players = [], isLoading, error } = usePlayers();
   const five = players.slice(0, 5);
   const [selected, setSelected] = useState<Player | null>(null);
   return (
@@ -27,13 +30,23 @@ export function RosterPreview() {
             View all players <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="grid grid-flow-col auto-cols-[80%] sm:auto-cols-[45%] md:grid-flow-row md:grid-cols-5 md:auto-cols-auto gap-4 overflow-x-auto md:overflow-visible snap-x pb-2 -mx-4 px-4 md:mx-0 md:px-0">
-          {five.map((p) => (
-            <div key={p.ign} className="snap-start">
-              <PlayerCard player={p} onClick={setSelected} />
-            </div>
-          ))}
-        </div>
+        {error ? (
+          <p className="text-[#A0A0A0]">Couldn't load roster right now.</p>
+        ) : isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="aspect-[3/4] w-full rounded-xl" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-flow-col auto-cols-[80%] sm:auto-cols-[45%] md:grid-flow-row md:grid-cols-5 md:auto-cols-auto gap-4 overflow-x-auto md:overflow-visible snap-x pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+            {five.map((p) => (
+              <div key={p.ign} className="snap-start">
+                <PlayerCard player={p} onClick={setSelected} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <PlayerModal player={selected} onClose={() => setSelected(null)} />
     </section>

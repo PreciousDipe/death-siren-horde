@@ -40,7 +40,7 @@ export function PlayerModal({ player, onClose }: Props) {
         </button>
 
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0c0c0c]">
-          <img src={player.photo} alt={player.ign} className="h-full w-full object-cover object-top" />
+          <img src={player.photo} alt={player.ign} className="h-full w-full object-cover object-top" onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0"; }} />
           <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-[#181818]/30 to-transparent" />
           <div className="absolute bottom-4 left-5 right-5">
             <div className="flex flex-wrap items-center gap-2">

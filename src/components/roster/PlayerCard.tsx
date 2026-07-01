@@ -16,7 +16,7 @@ export function PlayerCard({ player, showRealName, className = "", onClick }: Pr
       onClick={() => onClick?.(player)}
       className={`group relative w-full text-left overflow-hidden rounded-xl border border-white/5 bg-[#181818] hover-glow-brand cursor-pointer ${className}`}
     >
-      <div className="relative aspect-[3/4] w-full overflow-hidden">
+      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#0c0c0c]">
         <img
           src={player.photo}
           alt={player.ign}
@@ -24,6 +24,7 @@ export function PlayerCard({ player, showRealName, className = "", onClick }: Pr
           width={640}
           height={800}
           loading="lazy"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0"; }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-[#181818]/40 to-transparent" />
         <span

@@ -6,7 +6,8 @@ import {
   Plus, Pencil, Trash2, Save, X, UserPlus, BarChart3, MessageSquare,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
-import { players as seedPlayers, ROLES, type Player, type Role } from "@/data/players";
+import { ROLES, type Player, type Role } from "@/data/players";
+const seedPlayers: Player[] = [];
 import { supabase } from "@/integrations/supabase/client";
 import { MatchStatsTab } from "@/components/admin/MatchStatsTab";
 import { MessagesTab } from "@/components/admin/MessagesTab";
@@ -466,17 +467,8 @@ function PlayerForm({ initial, onSave, onCancel }: { initial: Player; onSave: (p
         </div>
         
         <div className="grid grid-cols-2 gap-3">
-          {/* --- New Linked Account Field --- */}
-          <div className="col-span-2 bg-white/5 p-3 rounded-lg border border-white/10 mb-2">
-            <Label className="text-[#00B8FF]">Linked Login Email</Label>
-            <input 
-              type="email"
-              className={inputCls} 
-              value={p.email || ""} 
-              onChange={(e) => set("email", e.target.value)} 
-              placeholder="e.g., player@darkstar.gg (Must match account created in Accounts tab)"
-            />
-          </div>
+
+
 
           <div><Label>IGN</Label><input className={inputCls} value={p.ign} onChange={(e) => set("ign", e.target.value)} /></div>
           <div><Label>Real Name</Label><input className={inputCls} value={p.realName} onChange={(e) => set("realName", e.target.value)} /></div>
