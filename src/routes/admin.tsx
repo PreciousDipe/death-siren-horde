@@ -6,7 +6,8 @@ import {
   Plus, Pencil, Trash2, Save, X, UserPlus, BarChart3, MessageSquare,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
-import { players as seedPlayers, ROLES, type Player, type Role } from "@/data/players";
+import { ROLES, type Player, type Role } from "@/data/players";
+const seedPlayers: Player[] = [];
 import { supabase } from "@/integrations/supabase/client";
 import { MatchStatsTab } from "@/components/admin/MatchStatsTab";
 import { MessagesTab } from "@/components/admin/MessagesTab";
