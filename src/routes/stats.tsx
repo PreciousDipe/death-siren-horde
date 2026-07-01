@@ -33,13 +33,18 @@ function StatsPage() {
 
   useEffect(() => {
     (async () => {
+      const { getSignedUrl } = await import("@/lib/storage");
       const [{ data: p }, { data: m }] = await Promise.all([
         supabase.from("profiles").select("id, display_name, ign, photo_url, role_in_team").eq("is_approved", true),
         supabase.from("match_stats").select("*").order("match_date", { ascending: false }),
       ]);
-      setProfiles((p as Profile[]) ?? []);
+      const signed = await Promise.all(((p as Profile[]) ?? []).map(async (pr) => ({
+        ...pr,
+        photo_url: pr.photo_url ? await getSignedUrl(pr.photo_url) : null,
+      })));
+      setProfiles(signed);
       setMatches((m as Match[]) ?? []);
-      setActiveId((p as Profile[])?.[0]?.id ?? null);
+      setActiveId(signed[0]?.id ?? null);
       setLoading(false);
     })();
   }, []);
