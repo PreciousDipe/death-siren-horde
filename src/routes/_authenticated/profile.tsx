@@ -128,8 +128,26 @@ function ProfilePage() {
                 <input className={input} placeholder="GOLD LANE, MID LANE…" value={profile.role_in_team ?? ""} onChange={(e) => update("role_in_team", e.target.value)} />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-white/60">Photo URL</label>
-                <input className={input} value={profile.photo_url ?? ""} onChange={(e) => update("photo_url", e.target.value)} />
+                <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-white/60">Profile Photo</label>
+                <div className="flex items-center gap-3">
+                  <PhotoPreview path={profile.photo_url} />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="text-xs text-white/70"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      try {
+                        const path = await uploadAvatar(profile.id, file);
+                        update("photo_url", path);
+                        toast.success("Photo uploaded. Click Save to keep it.");
+                      } catch (err: any) {
+                        toast.error(err.message ?? "Upload failed");
+                      }
+                    }}
+                  />
+                </div>
               </div>
               <div className="md:col-span-2">
                 <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-white/60">Bio</label>
