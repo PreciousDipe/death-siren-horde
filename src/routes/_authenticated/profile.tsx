@@ -180,3 +180,19 @@ function ProfilePage() {
     </SiteShell>
   );
 }
+
+function PhotoPreview({ path }: { path: string | null }) {
+  const [url, setUrl] = useState<string>("");
+  useEffect(() => {
+    let cancelled = false;
+    if (!path) { setUrl(""); return; }
+    getSignedUrl(path).then((u) => { if (!cancelled) setUrl(u); });
+    return () => { cancelled = true; };
+  }, [path]);
+  return (
+    <div className="h-16 w-16 rounded-md bg-[#0c0c0c] border border-white/10 overflow-hidden flex-shrink-0">
+      {url && <img src={url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />}
+    </div>
+  );
+}
+
