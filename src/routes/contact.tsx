@@ -94,15 +94,15 @@ function ContactPage() {
             {submitting ? "Sending..." : "Submit Application"}
           </button>
           <p className="text-[11px] text-[#A0A0A0]">
-            Your email will be used only to respond to your message. We'll reply from darkstaresports1@gmail.com.
+            Your email will be used only to respond to your message{contactEmail ? <>. We'll reply from <span className="text-white/80">{contactEmail}</span></> : ""}.
           </p>
         </form>
 
         <aside className="space-y-3">
           {[
-            { Icon: Mail, label: "Email", value: "darkstaresports1@gmail.com" },
-            { Icon: MessageCircle, label: "Discord", value: "https://discord.gg/ENm2RYJ4u" },
-          ].map(({ Icon, label, value }) => (
+            contactEmail ? { Icon: Mail, label: "Email", value: contactEmail } : null,
+            discordUrl ? { Icon: MessageCircle, label: "Discord", value: discordUrl } : null,
+          ].filter((x): x is { Icon: typeof Mail; label: string; value: string } => x !== null).map(({ Icon, label, value }) => (
             <div key={label} className="rounded-xl border border-white/5 bg-[#181818] p-4 flex items-center gap-3">
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-[#00B8FF]/10 text-[#00B8FF] ring-1 ring-[#00B8FF]/30">
                 <Icon className="h-5 w-5" />
@@ -113,7 +113,13 @@ function ContactPage() {
               </div>
             </div>
           ))}
+          {!contactEmail && !discordUrl && (
+            <div className="rounded-xl border border-white/5 bg-[#181818] p-4 text-xs text-[#A0A0A0]">
+              Contact details will appear here once an admin adds them in the dashboard.
+            </div>
+          )}
         </aside>
+
       </section>
     </SiteShell>
   );
