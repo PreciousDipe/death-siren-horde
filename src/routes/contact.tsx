@@ -4,6 +4,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Mail, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteSettings } from "@/lib/hooks/use-team-data";
+
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
