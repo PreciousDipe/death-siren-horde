@@ -632,7 +632,7 @@ function TournamentsTab() {
       </div>
 
       {sub === "meta" && (
-        <SupabaseList
+        <SupabaseList<TMeta>
           table="tournament_meta"
           orderBy="target_date"
           titleField="name"
@@ -646,7 +646,7 @@ function TournamentsTab() {
         />
       )}
       {sub === "schedule" && (
-        <SupabaseList
+        <SupabaseList<TSchedule>
           table="tournament_schedule"
           titleField="opponent"
           blank={() => ({ date: "", opponent: "", time: "", sort_order: 100 })}
@@ -659,7 +659,7 @@ function TournamentsTab() {
         />
       )}
       {sub === "standings" && (
-        <SupabaseList
+        <SupabaseList<TStanding>
           table="tournament_standings"
           titleField="team"
           blank={() => ({ team: "", w: 0, l: 0, pts: 0, highlight: false, sort_order: 100 })}
@@ -677,10 +677,15 @@ function TournamentsTab() {
   );
 }
 
+type TMeta = { id?: string; name: string; tag: string; target_date: string; is_active: boolean };
+type TSchedule = { id?: string; date: string; opponent: string; time: string; sort_order: number };
+type TStanding = { id?: string; team: string; w: number; l: number; pts: number; highlight: boolean; sort_order: number };
+type NewsRec = { id?: string; title: string; date: string; category: string; content: string; image_url: string | null; sort_order: number };
+
 /* ─── News ─────────────────────────────────────────────── */
 function NewsTab() {
   return (
-    <SupabaseList
+    <SupabaseList<NewsRec>
       table="news_items"
       titleField="title"
       blank={() => ({ title: "", date: "", category: "News", content: "", image_url: null, sort_order: 100 })}
@@ -695,6 +700,7 @@ function NewsTab() {
     />
   );
 }
+
 
 /* ─── Site Settings ────────────────────────────────────── */
 type SiteSettings = {
