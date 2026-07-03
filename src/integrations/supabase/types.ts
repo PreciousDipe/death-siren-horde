@@ -277,6 +277,42 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          contact_email: string
+          created_at: string
+          discord: string
+          id: string
+          instagram: string
+          singleton: boolean
+          tiktok: string
+          twitter: string
+          updated_at: string
+        }
+        Insert: {
+          contact_email?: string
+          created_at?: string
+          discord?: string
+          id?: string
+          instagram?: string
+          singleton?: boolean
+          tiktok?: string
+          twitter?: string
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string
+          created_at?: string
+          discord?: string
+          id?: string
+          instagram?: string
+          singleton?: boolean
+          tiktok?: string
+          twitter?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tournament_meta: {
         Row: {
           created_at: string
