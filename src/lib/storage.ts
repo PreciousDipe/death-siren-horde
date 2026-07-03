@@ -38,3 +38,21 @@ export async function uploadAvatar(userId: string, file: File): Promise<string> 
   cache.delete(path);
   return path;
 }
+
+/**
+ * Admin-only upload for team assets (players, news, tournament media).
+ * Writes to `<folder>/<timestamp>-<slug>.<ext>` and returns the storage path.
+ */
+export async function uploadTeamAsset(folder: string, file: File): Promise<string> {
+  const safeFolder = folder.replace(/[^a-z0-9/_-]/gi, "") || "misc";
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const slug = file.name.replace(/\.[^.]+$/, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40) || "asset";
+  const path = `${safeFolder}/${Date.now()}-${slug}.${ext}`;
+  const { error } = await supabase.storage
+    .from(BUCKET)
+    .upload(path, file, { upsert: false, contentType: file.type });
+  if (error) throw error;
+  cache.delete(path);
+  return path;
+}
+

@@ -101,14 +101,10 @@ function AuthPage() {
         </form>
 
         <p className="mt-6 text-center text-xs text-white/40">
-          Need an account? Contact your admin or email{" "}
-          <a
-            href="mailto:darkstaresports1@gmail.com"
-            className="text-[#00B8FF] hover:underline"
-          >
-            Darkstar Squad Leader
-          </a>
+          Need an account? Contact your team admin via the{" "}
+          <Link to="/contact" className="text-[#00B8FF] hover:underline">contact page</Link>.
         </p>
+
 
         <div className="mt-8 text-center">
           <Link
