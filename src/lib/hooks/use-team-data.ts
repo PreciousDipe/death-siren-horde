@@ -159,3 +159,28 @@ export function useStandings() {
     },
   });
 }
+
+export interface SiteSettings {
+  contact_email: string;
+  instagram: string;
+  twitter: string;
+  tiktok: string;
+  discord: string;
+}
+
+export function useSiteSettings() {
+  return useQuery<SiteSettings | null>({
+    queryKey: ["site-settings"],
+    staleTime: STALE,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .select("contact_email, instagram, twitter, tiktok, discord")
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return (data ?? null) as SiteSettings | null;
+    },
+  });
+}
+
