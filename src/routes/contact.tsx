@@ -22,6 +22,9 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", role: "", ign: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
+  const { data: settings } = useSiteSettings();
+  const contactEmail = settings?.contact_email?.trim() || "";
+  const discordUrl = settings?.discord?.trim() || "";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
