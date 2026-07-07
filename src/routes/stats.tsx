@@ -45,6 +45,7 @@ function StatsPage() {
   }, [navigate]);
 
   useEffect(() => {
+    if (!allowed) return;
     (async () => {
       const { getSignedUrl } = await import("@/lib/storage");
       const [{ data: p }, { data: m }] = await Promise.all([
@@ -60,7 +61,7 @@ function StatsPage() {
       setActiveId(signed[0]?.id ?? null);
       setLoading(false);
     })();
-  }, []);
+  }, [allowed]);
 
   const active = profiles.find((p) => p.id === activeId);
   const playerMatches = useMemo(
