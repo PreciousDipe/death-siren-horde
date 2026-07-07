@@ -21,6 +21,8 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", role: "", ign: "", message: "" });
+  const [honeypot, setHoneypot] = useState(""); // bots fill this hidden field
+  const [mountedAt] = useState(() => Date.now());
   const [submitting, setSubmitting] = useState(false);
   const { data: settings } = useSiteSettings();
   const contactEmail = settings?.contact_email?.trim() || "";
@@ -28,22 +30,34 @@ function ContactPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.name.trim() || !form.email.includes("@")) {
-      toast.error("Please provide a name and valid email");
+
+    // Bot checks — silently accept honeypot fills, block sub-3s submits
+    if (honeypot.trim() !== "") {
+      toast.success("Thanks! The squad will reach out via email soon.");
+      setForm({ name: "", email: "", role: "", ign: "", message: "" });
       return;
     }
-    if (!form.message.trim()) {
-      toast.error("Please write a message");
+    if (Date.now() - mountedAt < 3000) {
+      toast.error("Please take a moment to review before sending.");
       return;
     }
+
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const message = form.message.trim();
+    if (name.length < 2 || name.length > 120) return toast.error("Name must be 2–120 characters.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 255) return toast.error("Please enter a valid email address.");
+    if (message.length < 10) return toast.error("Message must be at least 10 characters.");
+    if (message.length > 4000) return toast.error("Message must be under 4000 characters.");
+
     setSubmitting(true);
     try {
       const { error } = await supabase.from("contact_messages").insert({
-        name: form.name.trim().slice(0, 120),
-        email: form.email.trim().slice(0, 255),
+        name: name.slice(0, 120),
+        email: email.slice(0, 255),
         role: form.role || null,
         ign: form.ign.trim() || null,
-        message: form.message.trim().slice(0, 4000),
+        message: message.slice(0, 4000),
       });
       if (error) throw error;
       toast.success("Thanks! The squad will reach out via email soon.");
