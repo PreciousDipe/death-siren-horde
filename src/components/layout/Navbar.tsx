@@ -14,7 +14,7 @@ const links = [
     ],
   },
   { to: "/tournaments", label: "Tournaments" },
-  { to: "/stats", label: "Stats" },
+  // Stats page is admin-only — accessed directly at /stats
   { to: "/achievements", label: "Achievements" },
   { to: "/media", label: "Media" },
   { to: "/news", label: "News" },

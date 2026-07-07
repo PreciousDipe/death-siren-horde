@@ -278,6 +278,17 @@ function PlayersTab() {
   useEffect(() => { load(); }, []);
 
   const save = async (p: PlayerRecord) => {
+    // Client-side validation
+    if (p.ign.trim().length < 2) return toast.error("IGN is required (min 2 chars).");
+    if (p.ign.length > 40) return toast.error("IGN must be under 40 characters.");
+    if (p.real_name.length > 120) return toast.error("Real name must be under 120 characters.");
+    if (p.win_rate < 0 || p.win_rate > 100) return toast.error("Win rate must be between 0 and 100.");
+    if (p.age < 0 || p.age > 120) return toast.error("Age must be between 0 and 120.");
+    if (p.matches < 0 || p.tournament_wins < 0 || p.years_active < 0) return toast.error("Numeric fields cannot be negative.");
+    for (const [label, url] of [["Instagram", p.instagram], ["Twitter", p.twitter], ["YouTube", p.youtube]] as const) {
+      if (url && !/^https?:\/\//i.test(url)) return toast.error(`${label} URL must start with http(s)://`);
+    }
+
     const payload = { ...p };
     if (payload.id) {
       const { error } = await supabase.from("players").update(payload).eq("id", payload.id);
@@ -433,13 +444,14 @@ type FieldSpec<T> = {
 };
 
 function SupabaseList<T extends { id?: string }>({
-  table, orderBy = "sort_order", titleField, blank, fields,
+  table, orderBy = "sort_order", titleField, blank, fields, validate,
 }: {
   table: string;
   orderBy?: string;
   titleField: keyof T & string;
   blank: () => T;
   fields: FieldSpec<T>[];
+  validate?: (item: T) => string | null;
 }) {
   const [rows, setRows] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
@@ -456,6 +468,10 @@ function SupabaseList<T extends { id?: string }>({
   useEffect(() => { load(); }, [table]);
 
   const save = async (item: T) => {
+    if (validate) {
+      const err = validate(item);
+      if (err) return toast.error(err);
+    }
     const payload = { ...item };
     if (payload.id) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -637,6 +653,12 @@ function TournamentsTab() {
           orderBy="target_date"
           titleField="name"
           blank={() => ({ name: "", tag: "", target_date: new Date().toISOString(), is_active: true })}
+          validate={(v) => {
+            if (!v.name.trim()) return "Tournament name is required.";
+            if (v.name.length > 120) return "Tournament name must be under 120 chars.";
+            if (v.target_date && isNaN(Date.parse(v.target_date))) return "Start date must be a valid ISO datetime.";
+            return null;
+          }}
           fields={[
             { key: "name", label: "Tournament Name" },
             { key: "tag", label: "Tag / Category" },
@@ -650,6 +672,11 @@ function TournamentsTab() {
           table="tournament_schedule"
           titleField="opponent"
           blank={() => ({ date: "", opponent: "", time: "", sort_order: 100 })}
+          validate={(v) => {
+            if (!v.opponent.trim()) return "Opponent is required.";
+            if (v.opponent.length > 120) return "Opponent must be under 120 chars.";
+            return null;
+          }}
           fields={[
             { key: "date", label: "Match Date" },
             { key: "opponent", label: "Opponent" },
@@ -663,6 +690,11 @@ function TournamentsTab() {
           table="tournament_standings"
           titleField="team"
           blank={() => ({ team: "", w: 0, l: 0, pts: 0, highlight: false, sort_order: 100 })}
+          validate={(v) => {
+            if (!v.team.trim()) return "Team name is required.";
+            if (v.w < 0 || v.l < 0 || v.pts < 0) return "Wins/losses/points cannot be negative.";
+            return null;
+          }}
           fields={[
             { key: "team", label: "Team Name" },
             { key: "w", label: "Wins", type: "number" },
@@ -689,6 +721,13 @@ function NewsTab() {
       table="news_items"
       titleField="title"
       blank={() => ({ title: "", date: "", category: "News", content: "", image_url: null, sort_order: 100 })}
+      validate={(v) => {
+        if (!v.title.trim()) return "Title is required.";
+        if (v.title.length > 200) return "Title must be under 200 chars.";
+        if (v.category && v.category.length > 60) return "Category must be under 60 chars.";
+        if (v.content && v.content.length > 20000) return "Content must be under 20,000 chars.";
+        return null;
+      }}
       fields={[
         { key: "title", label: "Title" },
         { key: "date", label: "Date (display)" },

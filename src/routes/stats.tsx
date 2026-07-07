@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { useEffect, useMemo, useState } from "react";
 import { Crown, Swords, Trophy, Coins, Shield, Target } from "lucide-react";
@@ -7,10 +7,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/stats")({
   head: () => ({
     meta: [
-      { title: "Player Stats — Darkstar Esports" },
-      { name: "description", content: "Track Darkstar player match performance, MVP counts, hero pools and key MLBB stats." },
-      { property: "og:title", content: "Darkstar Player Stats" },
-      { property: "og:description", content: "MLBB match tracker for the Darkstar and Deathsiren squads." },
+      { title: "Player Stats — Admin" },
+      { name: "description", content: "Admin-only match tracker for Darkstar and Deathsiren squads." },
+      { name: "robots", content: "noindex,nofollow" },
     ],
   }),
   component: StatsPage,
@@ -26,12 +25,27 @@ type Match = {
 };
 
 function StatsPage() {
+  const navigate = useNavigate();
+  const [gateReady, setGateReady] = useState(false);
+  const [allowed, setAllowed] = useState(false);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { setGateReady(true); navigate({ to: "/auth" }); return; }
+      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
+      if (!isAdmin) { setGateReady(true); navigate({ to: "/profile" }); return; }
+      setAllowed(true);
+      setGateReady(true);
+    })();
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!allowed) return;
     (async () => {
       const { getSignedUrl } = await import("@/lib/storage");
       const [{ data: p }, { data: m }] = await Promise.all([
@@ -47,7 +61,7 @@ function StatsPage() {
       setActiveId(signed[0]?.id ?? null);
       setLoading(false);
     })();
-  }, []);
+  }, [allowed]);
 
   const active = profiles.find((p) => p.id === activeId);
   const playerMatches = useMemo(
@@ -81,6 +95,9 @@ function StatsPage() {
       heroPool: top,
     };
   }, [playerMatches]);
+
+  if (!gateReady) return <div className="min-h-screen bg-[#080808] flex items-center justify-center text-sm text-[#A0A0A0]">Checking access…</div>;
+  if (!allowed) return null;
 
   return (
     <SiteShell>
