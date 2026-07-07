@@ -96,6 +96,9 @@ function StatsPage() {
     };
   }, [playerMatches]);
 
+  if (!gateReady) return <div className="min-h-screen bg-[#080808] flex items-center justify-center text-sm text-[#A0A0A0]">Checking access…</div>;
+  if (!allowed) return null;
+
   return (
     <SiteShell>
       <section className="mx-auto max-w-7xl px-4 md:px-6 pt-16">
