@@ -198,3 +198,100 @@ function PhotoPreview({ path }: { path: string | null }) {
   );
 }
 
+type Match = {
+  id: string; match_date: string; result: "WIN" | "LOSE";
+  hero: string; kills: number; deaths: number; assists: number;
+  gold: number; hero_damage: number; teamfight_participation: number; is_mvp: boolean;
+};
+
+function MyStats({ playerId }: { playerId: string }) {
+  const [matches, setMatches] = useState<Match[] | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase
+        .from("match_stats")
+        .select("id, match_date, result, hero, kills, deaths, assists, gold, hero_damage, teamfight_participation, is_mvp")
+        .eq("player_id", playerId)
+        .order("match_date", { ascending: false });
+      if (error) { setErr(error.message); return; }
+      setMatches((data ?? []) as Match[]);
+    })();
+  }, [playerId]);
+
+  if (err) return <div className="mt-10 text-sm text-rose-400">Couldn't load your stats: {err}</div>;
+  if (!matches) return <div className="mt-10 text-sm text-white/50">Loading your stats…</div>;
+
+  const total = matches.length;
+  const wins = matches.filter((m) => m.result === "WIN").length;
+  const k = matches.reduce((a, m) => a + m.kills, 0);
+  const d = matches.reduce((a, m) => a + m.deaths, 0);
+  const a = matches.reduce((s, m) => s + m.assists, 0);
+  const mvp = matches.filter((m) => m.is_mvp).length;
+  const kda = d === 0 ? (k + a).toFixed(2) : ((k + a) / d).toFixed(2);
+  const wr = total ? Math.round((wins / total) * 100) : 0;
+
+  return (
+    <div className="mt-12">
+      <h2 className="font-display text-2xl font-extrabold">MY STATS</h2>
+      <p className="mt-1 text-xs text-white/50">Only you and admins can see this.</p>
+
+      {total === 0 ? (
+        <div className="mt-4 rounded-xl border border-white/5 bg-[#181818] p-6 text-sm text-white/60">
+          No matches recorded yet. An admin will log your matches from the dashboard.
+        </div>
+      ) : (
+        <>
+          <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+            <StatMini label="Matches" value={`${total}`} />
+            <StatMini label="Win Rate" value={`${wr}%`} />
+            <StatMini label="KDA" value={kda} />
+            <StatMini label="MVP" value={`${mvp}`} />
+          </div>
+
+          <div className="mt-4 rounded-xl border border-white/5 bg-[#181818] overflow-x-auto">
+            <table className="w-full text-sm min-w-[560px]">
+              <thead className="text-[10px] uppercase tracking-[0.18em] text-white/50">
+                <tr className="border-b border-white/5">
+                  <th className="text-left py-3 px-3">Date</th>
+                  <th className="text-left">Hero</th>
+                  <th>Result</th>
+                  <th>KDA</th>
+                  <th>TFP</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {matches.map((m, i) => (
+                  <tr key={m.id} className={i % 2 ? "bg-[#121212]" : ""}>
+                    <td className="py-2 px-3 text-xs">{m.match_date}</td>
+                    <td className="font-semibold">{m.hero}</td>
+                    <td className="text-center">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${m.result === "WIN" ? "bg-emerald-500/15 text-emerald-400" : "bg-rose-500/15 text-rose-400"}`}>
+                        {m.result}
+                      </span>
+                    </td>
+                    <td className="text-center font-mono">{m.kills}/{m.deaths}/{m.assists}</td>
+                    <td className="text-center">{m.teamfight_participation}%</td>
+                    <td className="text-center">{m.is_mvp && "★"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function StatMini({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-white/5 bg-[#181818] p-4">
+      <div className="text-[10px] tracking-[0.2em] text-white/50 font-bold">{label}</div>
+      <div className="mt-2 font-display text-2xl font-extrabold">{value}</div>
+    </div>
+  );
+}
+
