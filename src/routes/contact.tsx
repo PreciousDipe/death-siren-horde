@@ -80,6 +80,13 @@ function ContactPage() {
 
       <section className="mx-auto max-w-7xl px-4 md:px-6 py-8 grid gap-8 lg:grid-cols-[1fr_320px]">
         <form onSubmit={handleSubmit} className="rounded-xl border border-white/5 bg-[#181818] p-6 md:p-8 space-y-4">
+          {/* Honeypot — hidden from real users, filled by bots */}
+          <div aria-hidden="true" className="absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden">
+            <label>
+              Website
+              <input type="text" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+            </label>
+          </div>
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="Full Name" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
             <Field label="Your Email" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
