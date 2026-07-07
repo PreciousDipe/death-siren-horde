@@ -278,6 +278,17 @@ function PlayersTab() {
   useEffect(() => { load(); }, []);
 
   const save = async (p: PlayerRecord) => {
+    // Client-side validation
+    if (p.ign.trim().length < 2) return toast.error("IGN is required (min 2 chars).");
+    if (p.ign.length > 40) return toast.error("IGN must be under 40 characters.");
+    if (p.real_name.length > 120) return toast.error("Real name must be under 120 characters.");
+    if (p.win_rate < 0 || p.win_rate > 100) return toast.error("Win rate must be between 0 and 100.");
+    if (p.age < 0 || p.age > 120) return toast.error("Age must be between 0 and 120.");
+    if (p.matches < 0 || p.tournament_wins < 0 || p.years_active < 0) return toast.error("Numeric fields cannot be negative.");
+    for (const [label, url] of [["Instagram", p.instagram], ["Twitter", p.twitter], ["YouTube", p.youtube]] as const) {
+      if (url && !/^https?:\/\//i.test(url)) return toast.error(`${label} URL must start with http(s)://`);
+    }
+
     const payload = { ...p };
     if (payload.id) {
       const { error } = await supabase.from("players").update(payload).eq("id", payload.id);
