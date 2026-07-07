@@ -721,6 +721,13 @@ function NewsTab() {
       table="news_items"
       titleField="title"
       blank={() => ({ title: "", date: "", category: "News", content: "", image_url: null, sort_order: 100 })}
+      validate={(v) => {
+        if (!v.title.trim()) return "Title is required.";
+        if (v.title.length > 200) return "Title must be under 200 chars.";
+        if (v.category && v.category.length > 60) return "Category must be under 60 chars.";
+        if (v.content && v.content.length > 20000) return "Content must be under 20,000 chars.";
+        return null;
+      }}
       fields={[
         { key: "title", label: "Title" },
         { key: "date", label: "Date (display)" },
