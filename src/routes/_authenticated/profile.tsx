@@ -174,6 +174,8 @@ function ProfilePage() {
             >
               {saving ? "Saving…" : "Save Changes"}
             </button>
+
+            <MyStats playerId={profile.id} />
           </>
         )}
       </section>
