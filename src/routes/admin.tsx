@@ -444,13 +444,14 @@ type FieldSpec<T> = {
 };
 
 function SupabaseList<T extends { id?: string }>({
-  table, orderBy = "sort_order", titleField, blank, fields,
+  table, orderBy = "sort_order", titleField, blank, fields, validate,
 }: {
   table: string;
   orderBy?: string;
   titleField: keyof T & string;
   blank: () => T;
   fields: FieldSpec<T>[];
+  validate?: (item: T) => string | null;
 }) {
   const [rows, setRows] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
@@ -467,6 +468,10 @@ function SupabaseList<T extends { id?: string }>({
   useEffect(() => { load(); }, [table]);
 
   const save = async (item: T) => {
+    if (validate) {
+      const err = validate(item);
+      if (err) return toast.error(err);
+    }
     const payload = { ...item };
     if (payload.id) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
