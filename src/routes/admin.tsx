@@ -653,6 +653,12 @@ function TournamentsTab() {
           orderBy="target_date"
           titleField="name"
           blank={() => ({ name: "", tag: "", target_date: new Date().toISOString(), is_active: true })}
+          validate={(v) => {
+            if (!v.name.trim()) return "Tournament name is required.";
+            if (v.name.length > 120) return "Tournament name must be under 120 chars.";
+            if (v.target_date && isNaN(Date.parse(v.target_date))) return "Start date must be a valid ISO datetime.";
+            return null;
+          }}
           fields={[
             { key: "name", label: "Tournament Name" },
             { key: "tag", label: "Tag / Category" },
@@ -666,6 +672,11 @@ function TournamentsTab() {
           table="tournament_schedule"
           titleField="opponent"
           blank={() => ({ date: "", opponent: "", time: "", sort_order: 100 })}
+          validate={(v) => {
+            if (!v.opponent.trim()) return "Opponent is required.";
+            if (v.opponent.length > 120) return "Opponent must be under 120 chars.";
+            return null;
+          }}
           fields={[
             { key: "date", label: "Match Date" },
             { key: "opponent", label: "Opponent" },
@@ -679,6 +690,11 @@ function TournamentsTab() {
           table="tournament_standings"
           titleField="team"
           blank={() => ({ team: "", w: 0, l: 0, pts: 0, highlight: false, sort_order: 100 })}
+          validate={(v) => {
+            if (!v.team.trim()) return "Team name is required.";
+            if (v.w < 0 || v.l < 0 || v.pts < 0) return "Wins/losses/points cannot be negative.";
+            return null;
+          }}
           fields={[
             { key: "team", label: "Team Name" },
             { key: "w", label: "Wins", type: "number" },
