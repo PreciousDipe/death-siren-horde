@@ -789,8 +789,6 @@ function SettingsTab() {
     }
   };
 
-  if (!s) return <p className="text-sm text-[#A0A0A0]">Loading…</p>;
-
   const fields = useMemo(() => ([
     { key: "contact_email" as const, label: "Contact / Recipient Email" },
     { key: "instagram" as const, label: "Instagram URL" },
@@ -798,6 +796,9 @@ function SettingsTab() {
     { key: "tiktok" as const, label: "TikTok URL" },
     { key: "discord" as const, label: "Discord Invite URL" },
   ]), []);
+
+  if (!s) return <p className="text-sm text-[#A0A0A0]">Loading…</p>;
+
 
   return (
     <div className="space-y-4 max-w-2xl">
